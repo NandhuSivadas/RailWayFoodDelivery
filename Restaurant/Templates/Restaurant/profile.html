@@ -1,0 +1,94 @@
+{% extends 'Restaurant/header.html' %}
+
+{% block title %}Rail Eats - Edit Restaurant Profile{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0" style="border-radius: var(--border-radius); overflow: hidden;">
+                <div class="card-header text-center py-4">
+                    <h3 class="mb-0 text-white"><i class="fas fa-store-alt me-2"></i>Edit Restaurant Profile</h3>
+                </div>
+                
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <p class="text-center text-muted mb-4">Keep your restaurant information up to date for your customers.</p>
+                    
+                    <form method="post" class="needs-validation">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Restaurant Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-primary">
+                                    <i class="fas fa-utensils"></i>
+                                </span>
+                                <input type="text" name="restaurant_name" class="form-control border-start-0" 
+                                       value="{{ restaurant.restaurant_name }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Owner Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-primary">
+                                    <i class="fas fa-user-tie"></i>
+                                </span>
+                                <input type="text" name="owner_name" class="form-control border-start-0" 
+                                       value="{{ restaurant.owner_name }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Contact Phone</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-primary">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <input type="text" name="phone" class="form-control border-start-0" 
+                                       value="{{ restaurant.phone }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Business Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-primary align-items-start pt-2">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </span>
+                                <textarea name="address" class="form-control border-start-0" rows="3" required>{{ restaurant.address }}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                <i class="fas fa-save me-2"></i>Update Profile
+                            </button>
+                            
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <a href="{% url 'wrestauarant:changepassword' %}" class="btn btn-outline-warning w-100">
+                                        <i class="fas fa-key me-2"></i>Password
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a href="{% url 'wrestauarant:homepage' %}" class="btn btn-outline-secondary w-100">
+                                        <i class="fas fa-arrow-left me-2"></i>Dashboard
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted small mb-2">
+                    <i class="fas fa-check-circle text-success me-1"></i> 
+                    Your restaurant is a verified Rail Eats delivery partner.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

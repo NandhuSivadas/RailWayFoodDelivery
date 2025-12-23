@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+<h2>Restaurants at {{ station }}</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Restaurant Name</th>
+    <th>Contact</th>
+    <th>Action</th>
+</tr>
+
+{% for r in restaurants %}
+<tr>
+    <td>{{ r.restaurant_name }}</td>
+    <td>{{ r.phone }}</td>
+    <td>
+        <a href="{% url 'wuser:view_food_items' r.id %}">View Menu</a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="3">No restaurants available</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

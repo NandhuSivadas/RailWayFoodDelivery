@@ -1,0 +1,157 @@
+{% extends 'User/header.html' %}
+
+{% block title %}Rail Eats - My Food Orders{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="page-title mb-0"><i class="fas fa-receipt"></i> My Food Orders</h2>
+            <p class="page-subtitle">Track your meals and manage active bookings</p>
+        </div>
+        <a href="{% url 'wuser:homepage' %}" class="btn-secondary-custom px-4 text-decoration-none">
+            <i class="fas fa-plus"></i> New Order
+        </a>
+    </div>
+
+    <div class="table-container shadow-lg">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Food Details</th>
+                        <th>Price & Qty</th>
+                        <th>Total Amount</th>
+                        <th>Booking Time</th>
+                        <th>Status</th>
+                        <th class="text-center">Cancellation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar bg-warning text-white">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="text-start">
+                                    <div class="user-name">{{ b.food.food_name }}</div>
+                                    <div class="user-phone small text-muted">{{ b.restaurant.restaurant_name }}</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="food-item">
+                                <span class="text-dark">₹ {{ b.price }}</span><br>
+                                <span class="badge bg-light text-dark border mt-1">x {{ b.quantity }}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="text-primary fw-bold" style="font-size: 1.1rem;">
+                                ₹ {{ b.total_amount }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="small text-muted">
+                                <i class="far fa-calendar-alt me-1"></i>{{ b.booking_date|date:"M d, Y" }}<br>
+                                <i class="far fa-clock me-1"></i>{{ b.booking_date|date:"h:i a" }}
+                            </div>
+                        </td>
+
+                        <td>
+                            {% if b.status == 0 %}
+                                <span class="badge-status status-pending">Pending</span>
+                            {% elif b.status == 1 %}
+                                <span class="badge-status status-success">Accepted</span>
+                            {% elif b.status == 2 %}
+                                <span class="badge-status status-danger">Rejected</span>
+                            {% elif b.status == 3 %}
+                                <span class="badge-status bg-secondary text-white">Cancelled</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-center">
+                            {% if b.can_cancel_flag %}
+                                <div class="d-flex flex-column align-items-center">
+                                    <span id="timer-{{ b.id }}" 
+                                          class="small fw-bold text-primary mb-2"
+                                          data-expiry="{{ b.cancel_deadline|date:'U' }}">
+                                        <i class="fas fa-hourglass-half me-1"></i>Loading...
+                                    </span>
+                                    
+                                    <a id="cancel-btn-{{ b.id }}" 
+                                       href="{% url 'wuser:cancel_booking' b.id %}" 
+                                       class="btn btn-danger btn-sm px-3"
+                                       onclick="return confirm('Are you sure you want to cancel this order?');">
+                                        Cancel Order
+                                    </a>
+                                </div>
+                            {% else %}
+                                <span class="text-muted small">
+                                    <i class="fas fa-ban me-1 text-danger"></i>Expired
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="empty-state text-center py-5">
+                            <i class="fas fa-shopping-basket mb-3" style="font-size: 3rem; color: #ddd;"></i>
+                            <h4 class="text-muted">No orders found</h4>
+                            <p class="text-muted small">Hungry? Place your first order now!</p>
+                            <a href="{% url 'wuser:home' %}" class="btn-primary-custom mt-2">Browse Menu</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/**
+ * Advanced Countdown Timer for Order Cancellation
+ */
+function startCountdown() {
+    const timers = document.querySelectorAll('[id^="timer-"]');
+
+    timers.forEach(timer => {
+        const expiry = parseInt(timer.dataset.expiry) * 1000;
+        const id = timer.id.split('-')[1];
+        const btn = document.getElementById('cancel-btn-' + id);
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = expiry - now;
+
+            if (diff <= 0) {
+                timer.innerHTML = '<i class="fas fa-exclamation-circle me-1 text-danger"></i>Expired';
+                timer.classList.replace('text-primary', 'text-danger');
+                if (btn) btn.style.display = "none";
+                return;
+            }
+
+            const mins = Math.floor((diff / 1000) / 60);
+            const secs = Math.floor((diff / 1000) % 60);
+
+            // Using padding for consistent timer width
+            const formattedSecs = secs.toString().padStart(2, '0');
+            timer.innerHTML = `<i class="fas fa-stopwatch me-1"></i>Cancel in ${mins}m ${formattedSecs}s`;
+        }
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', startCountdown);
+</script>
+{% endblock %}

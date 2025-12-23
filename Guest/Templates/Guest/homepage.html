@@ -1,806 +1,776 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="zxx">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Cake Template">
-    <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Rail | Eats</title>
+    <title>Rail Eats - Order Food Online</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+        :root {
+            --primary-orange: #FF9500;
+            --dark-bg: #1a1a1a;
+            --dark-text: #2C3E50;
+            --light-text: #ffffff;
+            --light-bg: #F8F9FA;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/bootstrap.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/flaticon.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/barfiller.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/magnific-popup.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/font-awesome.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static  'Guest_Home/css/elegant-icons.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/nice-select.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/owl.carousel.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/slicknav.min.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'Guest_Home/css/style.css' %}" type="text/css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            color: var(--dark-text);
+        }
+
+        /* ============================================
+           NAVBAR STYLING
+           ============================================ */
+        .navbar {
+            background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);
+            box-shadow: var(--box-shadow);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white !important;
+            letter-spacing: -1px;
+            padding-left: 20px !important;
+        }
+
+        .navbar-brand i {
+            color: white;
+            margin-right: 8px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            margin: 0 5px;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding: 1.5rem 1rem !important;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-logout {
+            background: var(--dark-bg);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-right: 20px;
+        }
+
+        .btn-logout:hover {
+            background: #333;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: inline-block;
+            margin-right: 15px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary-custom:hover {
+            background: linear-gradient(90deg, #ff8c00 0%, #ff7a00 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(255, 149, 0, 0.4);
+            color: white;
+        }
+
+        .btn-secondary-custom {
+            background: transparent;
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+            padding: 10px 33px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .btn-secondary-custom:hover {
+            background: var(--primary-orange);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* ============================================
+           SEARCH SECTION
+           ============================================ */
+        .search-section {
+            background: white;
+            padding: 40px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-form {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .search-form .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-form label {
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .search-form input,
+        .search-form select {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .search-form input:focus,
+        .search-form select:focus {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 0.3rem rgba(255, 149, 0, 0.25);
+            outline: none;
+        }
+
+        .search-btn {
+            background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(90deg, #ff8c00 0%, #ff7a00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 149, 0, 0.3);
+            color: white;
+        }
+
+        /* ============================================
+           FEATURES SECTION
+           ============================================ */
+        .features-section {
+            padding: 80px 0;
+            background: #f9f9f9;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #999;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            border-top: 4px solid var(--primary-orange);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(255, 149, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-orange);
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 12px;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           HOW IT WORKS SECTION
+           ============================================ */
+        .how-it-works {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step-card {
+            position: relative;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, #ff8c00 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 12px;
+        }
+
+        .step-description {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .step-card::after {
+            content: '';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-orange), transparent);
+            transform: translateY(-50%);
+        }
+
+        .step-card:last-child::after {
+            display: none;
+        }
+
+        /* ============================================
+           RESTAURANTS SECTION
+           ============================================ */
+        .restaurants-section {
+            padding: 80px 0;
+            background: #f9f9f9;
+        }
+
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .restaurant-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+        }
+
+        .restaurant-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(255, 149, 0, 0.15);
+        }
+
+        .restaurant-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-orange), #ff8c00);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            overflow: hidden;
+        }
+
+        .restaurant-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .restaurant-info {
+            padding: 20px;
+        }
+
+        .restaurant-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 8px;
+        }
+
+        .restaurant-location {
+            font-size: 0.9rem;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .restaurant-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--primary-orange);
+            font-size: 1.1rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .btn-order {
+            background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-order:hover {
+            background: linear-gradient(90deg, #ff8c00 0%, #ff7a00 100%);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h5 {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-orange);
+        }
+
+        .footer-section p, .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-orange);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+
+            .btn-primary-custom {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .step-card::after {
+                display: none;
+            }
+
+            .step-card {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
 </head>
-
 <body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fas fa-utensils"></i> Rail Eats</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                      <li class="nav-item"><a class="nav-link" href="{% url 'wguest:homepage' %}"><i class="fas fa-home"></i> Home</a></li>
+                      <li class="nav-item"><a class="nav-link" href="{% url 'wguest:login' %}"><i class=""></i> login</a></li>
+                      <li class="nav-item"><a class="nav-link" href="{% url 'wguest:signup' %}"><i class=""></i> user SignUp</a></li>
+                      <li class="nav-item"><a class="nav-link" href="{% url 'wguest:restaurant_signup' %}"><i class=""></i>restaurant Signup</a></li>
 
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__cart">
-            <div class="offcanvas__cart__links">
-                <a href="#" class="search-switch"><img src="{% static 'Guest_Home/img/icon/search.png' %}" alt=""></a>
-                <a href="#"><img src="{% static 'Guest_Home/img/icon/heart.png' %}" alt=""></a>
-            </div>
-            <div class="offcanvas__cart__item">
-                <a href="#"><img src="{% static 'Guest_Home/img/icon/cart.png' %}" alt=""> <span>0</span></a>
-                <div class="cart__price">Cart: <span>$0.00</span></div>
-            </div>
-        </div>
-        <div class="offcanvas__logo">
-            <a href="./index.html"><img src="{% static 'Guest_Home/img/logo.png' %}" alt=""></a>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__option">
-            <ul>
-                <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
-            </ul>
-        </div>
-    </div>
-    <!-- Offcanvas Menu End -->
 
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="header__top__inner">
-                            <div class="header__top__left">
-                                <ul>
-                                    
-                        
-                                    <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
-                                </ul>
-                            </div>
-                            <!-- <div class="header__logo">
-                                <a href="./index.html"><img src="{% static 'Guest_Home/img/logo.png' %}" alt=""></a>
-                            </div> -->
-                            <div class="header__top__right">
-                                <div class="header__top__right__links">
-                                    <a href="#" class="search-switch"><img src="{% static 'Guest_Home/img/icon/search.png' %}" alt=""></a>
-                                    <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                                </div>
-                                <div class="header__top__right__cart">
-                                    <a href="#"><img src="{% static 'Guest_Home/img/icon/cart.png' %}" alt=""> <span>0</span></a>
-                                    <div class="cart__price">Cart: <span>$0.00</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="canvas__open"><i class="fa fa-bars"></i></div>
+                </ul>
             </div>
         </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <nav class="header__menu mobile-menu">
-                        <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
-                            <li><a href="./about.html">About</a></li>
-                            <li><a href="./shop.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./wisslist.html">Wisslist</a></li>
-                                    <li><a href="./Class.html">Class</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- Header Section End -->
-
-    <!-- Hero Section Begin -->
-    <section class="hero">
-        <div class="hero__slider owl-carousel">
-            <div class="hero__item set-bg" data-setbg="{% static 'Guest_Home/img/hero/hero-1.jpg' %}">
-                <div class="container">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="hero__text">
-                                <h2>Making your life sweeter one bite at a time!</h2>
-                                <a href="#" class="primary-btn">Our cakes</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero__item set-bg" data-setbg="{% static 'Guest_Home/img/hero/hero-1.jpg' %}">
-                <div class="container">
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="hero__text">
-                                <h2>Making your life sweeter one bite at a time!</h2>
-                                <a href="#" class="primary-btn">Our cakes</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Hero Section End -->
-
-    <!-- About Section Begin -->
-    <section class="about spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="about__text">
-                        <div class="section-title">
-                            <span>About Cake shop</span>
-                            <h2>Cakes and bakes from the house of Queens!</h2>
-                        </div>
-                        <p>The "Cake Shop" is a Jordanian Brand that started as a small family business. The owners are
-                        Dr. Iyad Sultan and Dr. Sereen Sharabati, supported by a staff of 80 employees.</p>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="about__bar">
-                        <div class="about__bar__item">
-                            <p>Cake design</p>
-                            <div id="bar1" class="barfiller">
-                                <div class="tipWrap"><span class="tip"></span></div>
-                                <span class="fill" data-percentage="95"></span>
-                            </div>
-                        </div>
-                        <div class="about__bar__item">
-                            <p>Cake Class</p>
-                            <div id="bar2" class="barfiller">
-                                <div class="tipWrap"><span class="tip"></span></div>
-                                <span class="fill" data-percentage="80"></span>
-                            </div>
-                        </div>
-                        <div class="about__bar__item">
-                            <p>Cake Recipes</p>
-                            <div id="bar3" class="barfiller">
-                                <div class="tipWrap"><span class="tip"></span></div>
-                                <span class="fill" data-percentage="90"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- About Section End -->
-
-    <!-- Categories Section Begin -->
-    <div class="categories">
-        <div class="container">
-            <div class="row">
-                <div class="categories__slider owl-carousel">
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-029-cupcake-3"></span>
-                            <h5>Cupcake</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-034-chocolate-roll"></span>
-                            <h5>Butter</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-005-pancake"></span>
-                            <h5>Red Velvet</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-030-cupcake-2"></span>
-                            <h5>Biscuit</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-006-macarons"></span>
-                            <h5>Donut</h5>
-                        </div>
-                    </div>
-                    <div class="categories__item">
-                        <div class="categories__item__icon">
-                            <span class="flaticon-006-macarons"></span>
-                            <h5>Cupcake</h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Categories Section End -->
-
-    <!-- Product Section Begin -->
-    <section class="product spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-1.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Dozen Cupcakes</a></h6>
-                            <div class="product__item__price">$32.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-2.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Cookies and Cream</a></h6>
-                            <div class="product__item__price">$30.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-3.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Gluten Free Mini Dozen</a></h6>
-                            <div class="product__item__price">$31.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-4.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Cookie Dough</a></h6>
-                            <div class="product__item__price">$25.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-5.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Vanilla Salted Caramel</a></h6>
-                            <div class="product__item__price">$05.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-6.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">German Chocolate</a></h6>
-                            <div class="product__item__price">$14.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-7.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Dulce De Leche</a></h6>
-                            <div class="product__item__price">$32.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="img/shop/product-8.jpg">
-                            <div class="product__label">
-                                <span>Cupcake</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Mississippi Mud</a></h6>
-                            <div class="product__item__price">$08.00</div>
-                            <div class="cart_add">
-                                <a href="#">Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Product Section End -->
-
-    <!-- Class Section Begin -->
-    <section class="class spad">
-        <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-lg-6">
-                    <div class="class__form">
-                        <div class="section-title">
-                            <span>Class cakes</span>
-                            <h2>Made from your <br />own hands</h2>
-                        </div>
-                        <form action="#">
-                            <input type="text" placeholder="Name">
-                            <input type="text" placeholder="Phone">
-                            <select>
-                                <option value="">Studying Class</option>
-                                <option value="">Writting Class</option>
-                                <option value="">Reading Class</option>
-                            </select>
-                            <input type="text" placeholder="Type your requirements">
-                            <button type="submit" class="site-btn">registration</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="class__video set-bg" data-setbg="img/class-video.jpg">
-                <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1"
-                class="play-btn video-popup"><i class="fa fa-play"></i></a>
-            </div>
-        </div>
-    </section>
-    <!-- Class Section End -->
-
-    <!-- Team Section Begin -->
-    <section class="team spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-7 col-md-7 col-sm-7">
-                    <div class="section-title">
-                        <span>Our team</span>
-                        <h2>Sweet Baker </h2>
-                    </div>
-                </div>
-                <div class="col-lg-5 col-md-5 col-sm-5">
-                    <div class="team__btn">
-                        <a href="#" class="primary-btn">Join Us</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="team__item set-bg" data-setbg="img/team/team-1.jpg">
-                        <div class="team__item__text">
-                            <h6>Randy Butler</h6>
-                            <span>Decorater</span>
-                            <div class="team__item__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            </div>
+                    <div class="hero-content">
+                        <h1><i class="fas fa-train"></i> Order Fresh Food for Your Train Journey</h1>
+                        <p>Get delicious meals delivered to your train at any railway station. Fresh, hygienic, and on time.</p>
+                        <div>
+                            <button class="btn-primary-custom"><i class="fas fa-search"></i> Find Food Now</button>
+                            <button class="btn-secondary-custom"><i class="fas fa-question-circle"></i> Learn More</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="team__item set-bg" data-setbg="img/team/team-2.jpg">
-                        <div class="team__item__text">
-                            <h6>Randy Butler</h6>
-                            <span>Decorater</span>
-                            <div class="team__item__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="team__item set-bg" data-setbg="img/team/team-3.jpg">
-                        <div class="team__item__text">
-                            <h6>Randy Butler</h6>
-                            <span>Decorater</span>
-                            <div class="team__item__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="team__item set-bg" data-setbg="img/team/team-4.jpg">
-                        <div class="team__item__text">
-                            <h6>Randy Butler</h6>
-                            <span>Decorater</span>
-                            <div class="team__item__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            </div>
-                        </div>
+                <div class="col-lg-6 text-center">
+                    <div style="font-size: 8rem; color: var(--primary-orange);">
+                        <i class="fas fa-utensils"></i>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Team Section End -->
 
-    <!-- Testimonial Section Begin -->
-    <section class="testimonial spad">
+    <!-- Search Section -->
+    <section class="search-section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="section-title">
-                        <span>Testimonial</span>
-                        <h2>Our client say</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="testimonial__slider owl-carousel">
-                    <div class="col-lg-6">
-                        <div class="testimonial__item">
-                            <div class="testimonial__author">
-                                <div class="testimonial__author__pic">
-                                    <img src="img/testimonial/ta-1.jpg" alt="">
-                                </div>
-                                <div class="testimonial__author__text">
-                                    <h5>Kerry D.Silva</h5>
-                                    <span>New york</span>
-                                </div>
-                            </div>
-                            <div class="rating">
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star-half_alt"></span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua viverra lacus vel facilisis.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="testimonial__item">
-                            <div class="testimonial__author">
-                                <div class="testimonial__author__pic">
-                                    <img src="img/testimonial/ta-2.jpg" alt="">
-                                </div>
-                                <div class="testimonial__author__text">
-                                    <h5>Kerry D.Silva</h5>
-                                    <span>New york</span>
-                                </div>
-                            </div>
-                            <div class="rating">
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star-half_alt"></span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua viverra lacus vel facilisis.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="testimonial__item">
-                            <div class="testimonial__author">
-                                <div class="testimonial__author__pic">
-                                    <img src="img/testimonial/ta-1.jpg" alt="">
-                                </div>
-                                <div class="testimonial__author__text">
-                                    <h5>Ophelia Nunez</h5>
-                                    <span>London</span>
-                                </div>
-                            </div>
-                            <div class="rating">
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star-half_alt"></span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua viverra lacus vel facilisis.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="testimonial__item">
-                            <div class="testimonial__author">
-                                <div class="testimonial__author__pic">
-                                    <img src="img/testimonial/ta-2.jpg" alt="">
-                                </div>
-                                <div class="testimonial__author__text">
-                                    <h5>Kerry D.Silva</h5>
-                                    <span>New york</span>
-                                </div>
-                            </div>
-                            <div class="rating">
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star-half_alt"></span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua viverra lacus vel facilisis.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="testimonial__item">
-                            <div class="testimonial__author">
-                                <div class="testimonial__author__pic">
-                                    <img src="img/testimonial/ta-1.jpg" alt="">
-                                </div>
-                                <div class="testimonial__author__text">
-                                    <h5>Ophelia Nunez</h5>
-                                    <span>London</span>
-                                </div>
-                            </div>
-                            <div class="rating">
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star-half_alt"></span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua viverra lacus vel facilisis.</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="testimonial__item">
-                            <div class="testimonial__author">
-                                <div class="testimonial__author__pic">
-                                    <img src="img/testimonial/ta-2.jpg" alt="">
-                                </div>
-                                <div class="testimonial__author__text">
-                                    <h5>Kerry D.Silva</h5>
-                                    <span>New york</span>
-                                </div>
-                            </div>
-                            <div class="rating">
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star"></span>
-                                <span class="icon_star-half_alt"></span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua viverra lacus vel facilisis.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Testimonial Section End -->
-
-    <!-- Instagram Section Begin -->
-    <section class="instagram spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 p-0">
-                    <div class="instagram__text">
-                        <div class="section-title">
-                            <span>Follow us on instagram</span>
-                            <h2>Sweet moments are saved as memories.</h2>
-                        </div>
-                        <h5><i class="fa fa-instagram"></i> @sweetcake</h5>
-                    </div>
-                </div>
-                <div class="col-lg-8">
+            <div class="search-form">
+                <form method="get" action="{% url 'wuser:foods_by_station' %}">
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                            <div class="instagram__pic">
-                                <img src="img/instagram/instagram-1.jpg" alt="">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label><i class="fas fa-map-marker-alt"></i> Select Your Station</label>
+                                <select class="form-select" name="station" required>
+                                    <option value="">-- Choose Station --</option>
+                                    {% for s in stations %}
+                                        <option value="{{ s }}">{{ s }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                            <div class="instagram__pic middle__pic">
-                                <img src="img/instagram/instagram-2.jpg" alt="">
-                            </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="search-btn"><i class="fas fa-search"></i> Find Restaurants</button>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                            <div class="instagram__pic">
-                                <img src="img/instagram/instagram-3.jpg" alt="">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                            <div class="instagram__pic">
-                                <img src="img/instagram/instagram-4.jpg" alt="">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                            <div class="instagram__pic middle__pic">
-                                <img src="img/instagram/instagram-5.jpg" alt="">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-6">
-                            <div class="instagram__pic">
-                                <img src="img/instagram/instagram-3.jpg" alt="">
-                            </div>
-                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose Rail Eats?</h2>
+                <p>Experience seamless food delivery at every railway station</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="feature-title">Quick & Fresh</div>
+                        <div class="feature-text">Get your food prepared fresh and delivered quickly to your train at the station.</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="feature-title">100% Hygienic</div>
+                        <div class="feature-text">All restaurants are verified and follow strict hygiene standards for your safety.</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="feature-title">Best Prices</div>
+                        <div class="feature-text">Enjoy delicious food at affordable prices with regular discounts and offers.</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Instagram Section End -->
 
-    <!-- Map Begin -->
-    <div class="map">
+    <!-- How It Works -->
+    <section class="how-it-works">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-7">
-                    <div class="map__inner">
-                        <h6>COlorado</h6>
-                        <ul>
-                            <li>1000 Lakepoint Dr, Frisco, CO 80443, USA</li>
-                            <li>Sweetcake@support.com</li>
-                            <li>+1 800-786-1000</li>
-                        </ul>
-                    </div>
+            <div class="section-title">
+                <h2>How It Works</h2>
+                <p>Simple and easy steps to get your meal</p>
+            </div>
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Enter Train Details</div>
+                    <div class="step-description">Enter your train number and the station where you want your food delivered.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Choose Restaurant</div>
+                    <div class="step-description">Browse available restaurants and select from their delicious menu items.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Place Order</div>
+                    <div class="step-description">Add items to cart, review your order, and make payment securely.</div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Track & Receive</div>
+                    <div class="step-description">Track your order status and receive your meal at the selected station on time.</div>
                 </div>
             </div>
         </div>
-        <div class="map__iframe">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d10784.188505644011!2d19.053119335158936!3d47.48899529453826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1543907528304" height="300" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-        </div>
-    </div>
-    <!-- Map End -->
+    </section>
 
-    <!-- Footer Section Begin -->
-    <footer class="footer set-bg" data-setbg="{% static 'Guest_Home/footer-bg.jpg' %}">
+    <!-- Featured Restaurants -->
+    <section class="restaurants-section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>WORKING HOURS</h6>
-                        <ul>
-                            <li>Monday - Friday: 08:00 am – 08:30 pm</li>
-                            <li>Saturday: 10:00 am – 16:30 pm</li>
-                            <li>Sunday: 10:00 am – 16:30 pm</li>
-                        </ul>
+            <div class="section-title">
+                <h2>Popular Restaurants</h2>
+                <p>Order from our trusted restaurant partners</p>
+            </div>
+            <div class="restaurant-grid">
+                <div class="restaurant-card">
+                    <div class="restaurant-image">
+                        <i class="fas fa-pizza-slice"></i>
+                    </div>
+                    <div class="restaurant-info">
+                        <div class="restaurant-name">Pizza Palace</div>
+                        <div class="restaurant-location"><i class="fas fa-map-pin"></i> Delhi Junction</div>
+                        <div class="restaurant-stats">
+                            <div class="stat">
+                                <div class="stat-value">4.8</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">25-30</div>
+                                <div class="stat-label">mins</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">₹250</div>
+                                <div class="stat-label">Min Order</div>
+                            </div>
+                        </div>
+                        <button class="btn-order">Order Now</button>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="#"><img src="{% static 'Guest_Home/img/footer-logo.png' %}" alt=""></a>
+
+                <div class="restaurant-card">
+                    <div class="restaurant-image">
+                        <i class="fas fa-burger"></i>
+                    </div>
+                    <div class="restaurant-info">
+                        <div class="restaurant-name">Burger Bliss</div>
+                        <div class="restaurant-location"><i class="fas fa-map-pin"></i> Mumbai Central</div>
+                        <div class="restaurant-stats">
+                            <div class="stat">
+                                <div class="stat-value">4.6</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">20-25</div>
+                                <div class="stat-label">mins</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">₹200</div>
+                                <div class="stat-label">Min Order</div>
+                            </div>
                         </div>
-                        <p>Lorem ipsum dolor amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore dolore magna aliqua.</p>
-                        <div class="footer__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                        </div>
+                        <button class="btn-order">Order Now</button>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="footer__newslatter">
-                        <h6>Subscribe</h6>
-                        <p>Get latest updates and offers.</p>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit"><i class="fa fa-send-o"></i></button>
-                        </form>
+
+                <div class="restaurant-card">
+                    <div class="restaurant-image">
+                        <i class="fas fa-bowl-rice"></i>
+                    </div>
+                    <div class="restaurant-info">
+                        <div class="restaurant-name">Spice Kitchen</div>
+                        <div class="restaurant-location"><i class="fas fa-map-pin"></i> Bangalore City</div>
+                        <div class="restaurant-stats">
+                            <div class="stat">
+                                <div class="stat-value">4.9</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">30-35</div>
+                                <div class="stat-label">mins</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">₹300</div>
+                                <div class="stat-label">Min Order</div>
+                            </div>
+                        </div>
+                        <button class="btn-order">Order Now</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <p class="copyright__text text-white"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                          Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                      </p>
-                  </div>
-                  <div class="col-lg-5">
-                    <div class="copyright__widget">
-                        <ul>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms & Conditions</a></li>
-                            <li><a href="#">Site Map</a></li>
-                        </ul>
-                    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5><i class="fas fa-utensils"></i> Rail Eats</h5>
+                    <p>Order fresh and delicious food for your train journey with Rail Eats.</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Quick Links</h5>
+                    <a href="#">Home</a>
+                    <a href="#">Restaurants</a>
+                    <a href="#">Orders</a>
+                    <a href="#">My Account</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Support</h5>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Connect With Us</h5>
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
                 </div>
             </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Rail Eats. All rights reserved. | Fresh meals for every journey.</p>
+            </div>
         </div>
-    </div>
-</footer>
-<!-- Footer Section End -->
+    </footer>
 
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
-
-<!-- Js Plugins -->
-<script src="{% static 'Guest_Home/js/jquery-3.3.1.min.js' %}"></script>
-<script src="{% static 'Guest_Home/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'Guest_Home/js/jquery.nice-select.min.js' %}"></script>
-<script src="{% static 'Guest_Home/js/jquery.barfiller.js' %}"></script>
-<script src="{% static 'Guest_Home/js/jquery.magnific-popup.min.js' %}"></script>
-<script src="{% static 'GUest_Home/js/jquery.slicknav.js' %}"></script>
-<script src="{% static 'Guest_Home/js/owl.carousel.min.js' %}"></script>
-<script src="{% static 'Guest_Home/js/jquery.nicescroll.min.js' %}"></script>
-<script src="{% static 'Guest_Home/js/main.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

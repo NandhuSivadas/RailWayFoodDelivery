@@ -1,73 +1,104 @@
 {% extends 'Guest/Header.html' %}
 {% load static %}
+
+{% block title %}Rail Eats - User Registration{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>RailEats | User Signup</title>
-</head>
-<body>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="glass-card p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold"><i class="fas fa-user-plus text-warning me-2"></i>User Registration</h2>
+                    <p class="text-muted">Create your account to start ordering fresh meals for your journey.</p>
+                </div>
 
-<h2 style="text-align:center;">User Registration</h2>
+                {% if msg %}
+                    <div class="alert alert-danger border-0 shadow-sm py-2 text-center mb-4" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i> {{ msg }}
+                    </div>
+                {% endif %}
 
-{% if msg %}
-    <p style="color:red; text-align:center;">{{ msg }}</p>
-{% endif %}
+                <form method="post" class="needs-validation">
+                    {% csrf_token %}
 
-<form method="post">
-    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small uppercase">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <input type="text" name="txt_name" class="form-control border-start-0 py-2" 
+                                   placeholder="Your Name" required>
+                        </div>
+                    </div>
 
-    <table align="center" cellpadding="10" border="1">
-        <tr>
-            <td><label>Name</label></td>
-            <td>
-                <input type="text" name="txt_name" required>
-            </td>
-        </tr>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small uppercase">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            <input type="email" name="txt_email" class="form-control border-start-0 py-2" 
+                                   placeholder="name@example.com" required>
+                        </div>
+                    </div>
 
-        <tr>
-            <td><label>Email</label></td>
-            <td>
-                <input type="email" name="txt_email" required>
-            </td>
-        </tr>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small uppercase">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="fas fa-phone-alt"></i>
+                            </span>
+                            <input type="text" name="txt_phone" class="form-control border-start-0 py-2" 
+                                   placeholder="10-digit mobile number" required>
+                        </div>
+                    </div>
 
-        <tr>
-            <td><label>Phone</label></td>
-            <td>
-                <input type="text" name="txt_phone" required>
-            </td>
-        </tr>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold small uppercase">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                            <input type="password" name="txt_password" class="form-control border-start-0 py-2" 
+                                   placeholder="Create password" required>
+                        </div>
+                    </div>
 
-        <tr>
-            <td><label>Password</label></td>
-            <td>
-                <input type="password" name="txt_password" required>
-            </td>
-        </tr>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small uppercase">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-muted">
+                                <i class="fas fa-check-double"></i>
+                            </span>
+                            <input type="password" name="txt_confirm_password" class="form-control border-start-0 py-2" 
+                                   placeholder="Repeat password" required>
+                        </div>
+                    </div>
 
-        <tr>
-            <td><label>Confirm Password</label></td>
-            <td>
-                <input type="password" name="txt_confirm_password" required>
-            </td>
-        </tr>
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary-custom py-2 shadow-sm">
+                            <i class="fas fa-user-check me-2"></i>Create Account
+                        </button>
+                    </div>
 
-        <tr>
-            <td colspan="2" align="center">
-                <button type="submit">Register</button>
-            </td>
-        </tr>
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <span class="text-muted small">Already have an account?</span>
+                        <a href="{% url 'wguest:login' %}" class="fw-bold text-decoration-none ms-1" style="color: var(--primary-orange);">
+                            Log In here
+                        </a>
+                    </div>
+                </form>
+            </div>
 
-        <tr>
-            <td colspan="2" align="center">
-                Already have an account?
-                <a href="{% url 'wguest:login' %}">Login</a>
-            </td>
-        </tr>
-    </table>
-</form>
-
-</body>
-</html>
+            <div class="text-center mt-4">
+                <p class="text-muted small">
+                    <i class="fas fa-shield-alt text-success me-1"></i> 
+                    Your data is safe and encrypted with Rail Eats.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

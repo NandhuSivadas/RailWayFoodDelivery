@@ -1,0 +1,73 @@
+{% extends 'User/header.html' %}
+
+{% block title %}Rail Eats - Confirm Order{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-8">
+            <div class="card shadow-lg border-0" style="border-radius: var(--border-radius); overflow: hidden;">
+                <div class="card-header text-center py-4" style="background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);">
+                    <h3 class="mb-0 text-white"><i class="fas fa-shopping-basket me-2"></i>Confirm Order</h3>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <div class="order-summary mb-4 p-3 bg-light rounded-3 border-start border-4 border-warning">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small uppercase fw-bold">Food Item</span>
+                            <span class="text-dark fw-bold">{{ food.food_name }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted small uppercase fw-bold">Restaurant</span>
+                            <span class="text-secondary">{{ food.restaurant.restaurant_name }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted small uppercase fw-bold">Price per item</span>
+                            <span class="text-primary fw-bold" style="font-size: 1.2rem;">₹ {{ food.price }}</span>
+                        </div>
+                    </div>
+
+                    <form method="post" class="needs-validation">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Quantity</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0"><i class="fas fa-sort-numeric-up text-warning"></i></span>
+                                <input type="number" name="quantity" class="form-control border-start-0" 
+                                       min="1" value="1" placeholder="How many?" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Delivery Time</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0"><i class="fas fa-clock text-warning"></i></span>
+                                <input type="time" name="delivery_time" class="form-control border-start-0" required>
+                            </div>
+                            <small class="text-muted mt-1 d-block"><i class="fas fa-info-circle me-1"></i>Set this according to your train's arrival.</small>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn-primary-custom py-3">
+                                <i class="fas fa-check-circle me-2"></i>Confirm Order
+                            </button>
+                            <a href="{% url 'wuser:foods_by_station' %}?station={{ food.restaurant.station_name }}" 
+                               class="btn-secondary-custom text-center py-2">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Menu
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted small">
+                    <i class="fas fa-shield-alt text-success me-1"></i> 
+                    Secure Checkout by Rail Eats
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

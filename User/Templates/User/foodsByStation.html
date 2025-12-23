@@ -1,0 +1,78 @@
+{% extends 'User/header.html' %}
+
+{% block title %}Rail Eats - Foods at {{ station }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="page-header text-center mb-5">
+        <h2 class="page-title"><i class="fas fa-map-marker-alt"></i> Available Foods at {{ station }}</h2>
+        <p class="page-subtitle">Choose from the best rated restaurants delivering to your platform</p>
+    </div>
+
+    <div class="table-container shadow-lg">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Restaurant</th>
+                        <th scope="col">Food Item</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Price</th>
+                        <th scope="col" class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for food in foods %}
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    <i class="fas fa-store"></i>
+                                </div>
+                                <div class="text-start">
+                                    <div class="user-name">{{ food.restaurant.restaurant_name }}</div>
+                                    <div class="user-phone small text-muted">Verified Partner</div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="fw-bold text-dark">
+                            {{ food.food_name }}
+                        </td>
+
+                        <td>
+                            {% if food.category == "Veg" %}
+                                <span class="text-success"><i class="fas fa-leaf me-1"></i> Veg</span>
+                            {% else %}
+                                <span class="text-danger"><i class="fas fa-drumstick-bite me-1"></i> Non-Veg</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="fw-bold text-secondary">
+                            <i class="fas fa-rupee-sign me-1"></i>{{ food.price }}
+                        </td>
+
+                        <td class="text-center">
+                            <a href="{% url 'wuser:book_food' food.id %}" class="btn btn-primary-custom btn-sm px-4">
+                                <i class="fas fa-shopping-cart me-2"></i>Book Now
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-state text-center py-5">
+                            <div class="mb-3" style="font-size: 4rem; color: #ddd;">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h4 class="text-muted">No food items available</h4>
+                            <p class="text-muted small">Try searching for a different station or check back later.</p>
+                            <a href="{% url 'wuser:home' %}" class="btn btn-secondary-custom mt-3">Go Back Home</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

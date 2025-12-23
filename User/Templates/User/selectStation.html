@@ -1,0 +1,54 @@
+{% extends 'User/header.html' %}
+
+{% block title %}Rail Eats - Select Station{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card shadow-lg border-0" style="border-radius: var(--border-radius); overflow: hidden;">
+                <div class="card-header text-center py-4" style="background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);">
+                    <h3 class="mb-0 text-white"><i class="fas fa-train me-2"></i>Find Your Station</h3>
+                </div>
+                
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <p class="text-center text-muted mb-4">Select the railway station where you would like your fresh meal delivered.</p>
+                    
+                    <form method="get" action="{% url 'wuser:foods_by_station' %}">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold"><i class="fas fa-map-marker-alt text-warning me-2"></i>Railway Station</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="fas fa-city text-muted"></i></span>
+                                <select name="station" class="form-select border-start-0 p-3" style="font-size: 1rem;" required>
+                                    <option value="" selected disabled>-- Search or Select Station --</option>
+                                    {% for s in stations %}
+                                        <option value="{{ s }}">{{ s }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn-primary-custom py-3 shadow-sm">
+                                <i class="fas fa-search me-2"></i>View Available Foods
+                            </button>
+                            <a href="{% url 'wuser:homepage' %}" class="btn-secondary-custom text-center py-2 text-decoration-none">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Home
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <div class="p-3 rounded-pill bg-light d-inline-block border shadow-sm">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle text-primary me-1"></i> 
+                        Station not listed? We are expanding to more routes soon!
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

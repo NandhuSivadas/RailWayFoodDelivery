@@ -1,0 +1,77 @@
+{% extends 'Restaurant/header.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="page-header text-center mb-5">
+        <h2 class="page-title"><i class="fas fa-utensils"></i> Food Booking Requests</h2>
+        <p class="page-subtitle">Manage incoming orders from train passengers in real-time</p>
+    </div>
+
+    <div class="table-container shadow-lg">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Food & Quantity</th>
+                        <th scope="col">Delivery Time</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in booking_requests %}
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    {{ request.user.username|slice:":1"|upper }}
+                                </div>
+                                <div class="text-start">
+                                    <div class="user-name">{{ request.user.username }}</div>
+                                    <div class="user-phone small text-muted">ID: #{{ request.id }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="food-item">
+                                <span class="fw-bold text-dark">{{ request.food_name }}</span><br>
+                                <span class="quantity-badge mt-1">Qty: {{ request.quantity }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-secondary fw-semibold">
+                                <i class="far fa-clock me-1 text-primary"></i>{{ request.delivery_time }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-muted small">
+                                <i class="far fa-calendar-alt me-1"></i>{{ request.date }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-column">
+                                <a href="{% url 'wrestauarant:accept_order' request.id %}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i> Accept
+                                </a>
+                                <a href="{% url 'wrestauarant:reject_order' request.id %}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i> Reject
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-clipboard-list"></i>
+                            <h4>No Booking Requests Yet</h4>
+                            <p>New orders will appear here as they come in.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

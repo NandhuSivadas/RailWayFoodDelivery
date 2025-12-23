@@ -1,0 +1,76 @@
+{% extends 'User/header.html' %}
+
+{% block title %}Rail Eats - Order Success{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 text-center">
+            <div class="card shadow-lg border-0 py-5 px-4" style="border-radius: var(--border-radius); background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);">
+                
+                <div class="mb-4">
+                    <div class="display-1 text-success animate-bounce">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <h2 class="fw-bold text-dark mb-3">🎉 Order Placed Successfully!</h2>
+                    <p class="text-muted mb-4 fs-5">
+                        Your delicious meal is being prepared. Our delivery partner will meet you at the station platform on time.
+                    </p>
+
+                    <div class="bg-light p-3 rounded-3 mb-5 border-dashed">
+                        <p class="small text-muted mb-0">
+                            <i class="fas fa-info-circle me-1"></i>
+                            You can track your real-time order status and delivery person details in the "My Orders" section.
+                        </p>
+                    </div>
+
+                    <div class="d-grid gap-3 d-sm-flex justify-content-center">
+                        <a href="{% url 'wuser:my_bookings' %}" class="btn-primary-custom px-5 py-3 text-decoration-none">
+                            <i class="fas fa-list-ul me-2"></i>View My Orders
+                        </a>
+                        <a href="{% url 'wuser:homepage' %}" class="btn-secondary-custom px-5 py-3 text-decoration-none">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 animate-fade-in">
+                <p class="text-secondary small">
+                    <i class="fas fa-lightbulb text-warning me-1"></i>
+                    Tip: Keep your PNR number handy for easy verification during delivery.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Success Page Animations */
+    .animate-bounce {
+        animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+        40% {transform: translateY(-20px);}
+        60% {transform: translateY(-10px);}
+    }
+
+    .border-dashed {
+        border: 2px dashed #ddd;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 1.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+{% endblock %}

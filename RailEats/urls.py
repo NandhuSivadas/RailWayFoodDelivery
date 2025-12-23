@@ -22,5 +22,6 @@ urlpatterns = [
     path('Admin/',include('Admin.urls')),
     path('Guest/',include('Guest.urls')),
     path('User/',include('User.urls')),
+    path('Restaurant/',include('Restaurant.urls')),
     
 ]

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Guest',
     'Admin',
     'User',
+    'Restaurant',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Approval</title>
+</head>
+<body>
+
+<h2>Pending Restaurant Requests</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Name</th>
+    <th>Owner</th>
+    <th>Station</th>
+    <th>Email</th>
+    <th>Action</th>
+</tr>
+
+{% for r in restaurants %}
+<tr>
+    <td>{{ r.restaurant_name }}</td>
+    <td>{{ r.owner_name }}</td>
+    <td>{{ r.station_name }}</td>
+    <td>{{ r.email }}</td>
+    <td>
+        <a href="{% url 'approve_restaurant' r.id %}">Approve</a> |
+        <a href="{% url 'reject_restaurant' r.id %}">Reject</a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="5">No pending requests</td>
+</tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

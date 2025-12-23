@@ -1,0 +1,77 @@
+{% extends 'Restaurant/header.html' %}
+
+{% block title %}Rail Eats - Update {{ food.food_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header text-center py-3">
+                    <h3 class="mb-0"><i class="fas fa-edit me-2"></i>Update Food Item</h3>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Food Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-primary">
+                                    <i class="fas fa-utensils"></i>
+                                </span>
+                                <input type="text" name="food_name" class="form-control border-start-0" 
+                                       value="{{ food.food_name }}" placeholder="Enter food name" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Category</label>
+                                <select name="category" class="form-select" required>
+                                    <option value="Veg" {% if food.category == 'Veg' %}selected{% endif %}>🟢 Veg</option>
+                                    <option value="Non-Veg" {% if food.category == 'Non-Veg' %}selected{% endif %}>🔴 Non-Veg</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label">Price (₹)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-primary">
+                                        <i class="fas fa-rupee-sign"></i>
+                                    </span>
+                                    <input type="number" step="0.01" name="price" class="form-control border-start-0" 
+                                           value="{{ food.price }}" placeholder="0.00" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="4" 
+                                      placeholder="Update ingredients or details...">{{ food.description }}</textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sync-alt me-2"></i>Save Changes
+                            </button>
+                            <a href="{% url 'wrestauarant:restaurant_foods' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel & Go Back
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="text-muted small">
+                    <i class="fas fa-history me-1"></i> 
+                    Updating this item will reflect instantly on the passenger menu.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

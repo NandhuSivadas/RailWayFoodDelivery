@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rail Eats - Order Food Online{% endblock %}</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* All your root and global styles from the homepage */
+        :root {
+            --primary-orange: #FF9500;
+            --dark-bg: #1a1a1a;
+            --dark-text: #2C3E50;
+            --light-text: #ffffff;
+            --light-bg: #F8F9FA;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            color: var(--dark-text);
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);
+            box-shadow: var(--box-shadow);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white !important;
+            letter-spacing: -1px;
+            padding-left: 20px !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            margin: 0 5px;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding: 1.5rem 1rem !important;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-logout {
+            background: var(--dark-bg);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-right: 20px;
+        }
+
+        .btn-logout:hover {
+            background: #333;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* Global Footer */
+        footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+
+        .footer-section h5 { color: var(--primary-orange); font-weight: 700; margin-bottom: 15px; }
+        .footer-section a { color: rgba(255, 255, 255, 0.8); text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
+        .footer-section a:hover { color: var(--primary-orange); }
+        .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; text-align: center; margin-top: 20px; }
+
+        /* Custom Buttons used across site */
+        .btn-primary-custom {
+            background: linear-gradient(90deg, var(--primary-orange) 0%, #ff8c00 100%);
+            color: white; border: none; padding: 12px 35px; border-radius: 8px; font-weight: 600; transition: var(--transition);
+        }
+        .btn-primary-custom:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(255, 149, 0, 0.4); color: white; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'wuser:homepage' %}"><i class="fas fa-utensils"></i> Rail Eats</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wuser:homepage' %}"><i class="fas fa-home"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wuser:select_station' %}"><i class="fas fa-utensils"></i> SearchRestaurant</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wuser:my_bookings' %}"><i class="fas fa-receipt"></i>my bookings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wuser:profile' %}"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li class="nav-item">
+                        <form action="{% url 'wuser:logout' %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <!-- <button type="submit" class="btn btn-logout mt-2 mt-lg-0"><i class="fas fa-sign-out-alt"></i> Logout</button> -->
+                           <li class="nav-item"><a class="nav-link" href="{% url 'wuser:logout' %}"><i class="fas fa-user-circle"></i> logout</a></li>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="row footer-content">
+                <div class="col-md-3 footer-section">
+                    <h5><i class="fas fa-utensils"></i> Rail Eats</h5>
+                    <p>Order fresh and delicious food for your train journey.</p>
+                </div>
+                <div class="col-md-3 footer-section">
+                    <h5>Quick Links</h5>
+                    <a href="#">Home</a>
+                    <a href="#">Restaurants</a>
+                    <a href="#">Orders</a>
+                </div>
+                <div class="col-md-3 footer-section">
+                    <h5>Support</h5>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                </div>
+                <div class="col-md-3 footer-section">
+                    <h5>Connect</h5>
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Rail Eats. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
