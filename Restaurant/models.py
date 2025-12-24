@@ -1,6 +1,8 @@
 from django.db import models
 from Guest.models import *
 # Create your models here.
+
+
 class tbl_food(models.Model):
     restaurant = models.ForeignKey(
         tbl_restaurant,

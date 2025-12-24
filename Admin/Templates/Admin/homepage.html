@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rail Eats - Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF9500;
+            --secondary-blue: #004E89;
+            --accent-cyan: #1B9CFC;
+            --dark-bg: #1a1a1a;
+            --dark-text: #2C3E50;
+            --light-bg: #F8F9FA;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark-text);
+        }
+
+        /* ============================================
+           NAVBAR STYLING
+           ============================================ */
+        .navbar {
+            background: linear-gradient(90deg, var(--secondary-blue) 0%, var(--accent-cyan) 100%);
+            box-shadow: var(--box-shadow);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--primary-orange);
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white !important;
+            letter-spacing: -1px;
+            padding-left: 20px !important;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand i {
+            color: var(--primary-orange);
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            margin: 0 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0 !important;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--primary-orange);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn-admin-logout {
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-right: 20px;
+        }
+
+        .btn-admin-logout:hover {
+            background: #ff8c00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
+            color: white;
+        }
+
+        .admin-user-info {
+            color: white;
+            margin-right: 20px;
+            font-weight: 600;
+        }
+
+        .admin-user-info i {
+            color: var(--primary-orange);
+            margin-right: 8px;
+        }
+
+        /* ============================================
+           ADMIN HEADER SECTION
+           ============================================ */
+        .admin-header {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-cyan) 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .admin-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .admin-header i {
+            color: var(--primary-orange);
+            margin-right: 12px;
+        }
+
+        /* ============================================
+           STATS CARDS - ADVANCED GLASSMORPHISM
+           ============================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: cardSlideIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+        .stat-card:nth-child(5) { animation-delay: 0.5s; }
+        .stat-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--accent-cyan));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-orange);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.15) rotate(10deg);
+        }
+
+        .stat-icon.users {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+            color: white;
+        }
+
+        .stat-icon.restaurants {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, #FFB366 100%);
+            color: white;
+        }
+
+        .stat-icon.orders {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            color: white;
+        }
+
+        .stat-icon.stations {
+            background: linear-gradient(135deg, #9B59B6 0%, #D946A6 100%);
+            color: white;
+        }
+
+        .stat-icon.revenue {
+            background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%);
+            color: white;
+        }
+
+        .stat-icon.complaints {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        .stat-change.positive {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .stat-change.negative {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        /* ============================================
+           ACTION BUTTONS SECTION
+           ============================================ */
+        .action-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--box-shadow);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .action-section h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            margin-bottom: 30px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-cyan) 100%);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            box-shadow: 0 4px 15px rgba(0, 78, 137, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 78, 137, 0.5);
+            color: white;
+        }
+
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+
+        .action-btn.manage-users {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .action-btn.manage-users:hover {
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.5);
+        }
+
+        .action-btn.manage-restaurants {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, #FFB366 100%);
+            box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+        }
+
+        .action-btn.manage-restaurants:hover {
+            box-shadow: 0 12px 30px rgba(255, 149, 0, 0.5);
+        }
+
+        .action-btn.manage-stations {
+            background: linear-gradient(135deg, #9B59B6 0%, #D946A6 100%);
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+        }
+
+        .action-btn.manage-stations:hover {
+            box-shadow: 0 12px 30px rgba(155, 89, 182, 0.5);
+        }
+
+        .action-btn.manage-trains {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .action-btn.manage-trains:hover {
+            box-shadow: 0 12px 30px rgba(78, 205, 196, 0.5);
+        }
+
+        .action-btn.view-orders {
+            background: linear-gradient(135deg, #2ECC71 0%, #27AE60 100%);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .action-btn.view-orders:hover {
+            box-shadow: 0 12px 30px rgba(46, 204, 113, 0.5);
+        }
+
+        .action-btn.reports {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+            box-shadow: 0 4px 15px rgba(230, 76, 60, 0.3);
+        }
+
+        .action-btn.reports:hover {
+            box-shadow: 0 12px 30px rgba(230, 76, 60, 0.5);
+        }
+
+        /* ============================================
+           RECENT ACTIVITY SECTION
+           ============================================ */
+        .activity-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .activity-section h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            margin-bottom: 30px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0, 78, 137, 0.1);
+            animation: activityFadeIn 0.5s ease-out;
+        }
+
+        @keyframes activityFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .activity-item:nth-child(1) { animation-delay: 0.1s; }
+        .activity-item:nth-child(2) { animation-delay: 0.2s; }
+        .activity-item:nth-child(3) { animation-delay: 0.3s; }
+        .activity-item:nth-child(4) { animation-delay: 0.4s; }
+        .activity-item:nth-child(5) { animation-delay: 0.5s; }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary-blue), var(--accent-cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            margin-right: 20px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 78, 137, 0.2);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 5px;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #ccc;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           PERFORMANCE METRICS
+           ============================================ */
+        .metrics-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            animation: metricSlideIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes metricSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .metric-card:nth-child(1) { animation-delay: 0.1s; }
+        .metric-card:nth-child(2) { animation-delay: 0.2s; }
+        .metric-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .metric-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .metric-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--secondary-blue);
+            margin-bottom: 15px;
+        }
+
+        .progress-bar-custom {
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-orange), #FF6B35);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--secondary-blue);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
+            border-top: 3px solid var(--primary-orange);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h5 {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-section p, .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-orange);
+            margin-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 768px) {
+            .admin-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+
+            .action-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .action-btn {
+                padding: 15px 15px;
+                font-size: 0.85rem;
+                flex-direction: column;
+            }
+
+            .action-btn i {
+                font-size: 1.5rem;
+            }
+
+            .activity-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                margin-right: 15px;
+            }
+
+            .navbar-brand {
+                padding-left: 10px !important;
+            }
+
+            .nav-link {
+                padding: 0.7rem 0.5rem !important;
+            }
+
+            .stat-card {
+                padding: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .action-section,
+            .activity-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fas fa-shield-alt"></i> Rail Eats Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:homepage' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:homepage' %}"><i class="fas fa-users"></i> Users</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-utensils"></i> Restaurants</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-receipt"></i> Orders</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li class="nav-item">
+                        <span class="admin-user-info">
+                            <i class="fas fa-user-shield"></i> Admin
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-admin-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="container">
+            <h1><i class="fas fa-chart-line"></i> Admin Dashboard</h1>
+            <p>Manage all Rail Eats operations from this central hub</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon users">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number">2,850</div>
+                <div class="stat-label">Total Users</div>
+                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 12% this month</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon restaurants">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="stat-number">145</div>
+                <div class="stat-label">Active Restaurants</div>
+                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 8% growth</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orders">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="stat-number">12,340</div>
+                <div class="stat-label">Total Orders</div>
+                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 25% increase</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon stations">
+                    <i class="fas fa-train"></i>
+                </div>
+                <div class="stat-number">28</div>
+                <div class="stat-label">Railway Stations</div>
+                <span class="stat-change negative"><i class="fas fa-arrow-down"></i> No change</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-rupee-sign"></i>
+                </div>
+                <div class="stat-number">₹24.5L</div>
+                <div class="stat-label">Total Revenue</div>
+                <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 18% boost</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon complaints">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="stat-number">42</div>
+                <div class="stat-label">Pending Complaints</div>
+                <span class="stat-change negative"><i class="fas fa-arrow-up"></i> 5 new today</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="action-section">
+            <h3><i class="fas fa-lightning-bolt"></i> Quick Actions</h3>
+            <div class="action-grid">
+                <button class="action-btn manage-users" onclick="alert('Redirect to Manage Users')">
+                    <i class="fas fa-users-cog"></i> Manage Users
+                </button>
+                <button class="action-btn manage-restaurants" onclick="alert('Redirect to Manage Restaurants')">
+                    <i class="fas fa-store"></i> Manage Restaurants
+                </button>
+                <button class="action-btn manage-stations" onclick="alert('Redirect to Manage Stations')">
+                    <i class="fas fa-map-location-dot"></i> Manage Stations
+                </button>
+                <button class="action-btn manage-trains" onclick="alert('Redirect to Manage Trains')">
+                    <i class="fas fa-train"></i> Manage Trains
+                </button>
+                <button class="action-btn view-orders" onclick="alert('Redirect to View Orders')">
+                    <i class="fas fa-box"></i> View All Orders
+                </button>
+                <button class="action-btn reports" onclick="alert('Redirect to Generate Reports')">
+                    <i class="fas fa-file-pdf"></i> Generate Reports
+                </button>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="metrics-section">
+            <div class="metric-card">
+                <h4><i class="fas fa-percentage"></i> Order Success Rate</h4>
+                <div class="progress-bar-custom">
+                    <div class="progress-fill" style="width: 92%"></div>
+                </div>
+                <div class="metric-value">92%</div>
+            </div>
+
+            <div class="metric-card">
+                <h4><i class="fas fa-star"></i> Average Restaurant Rating</h4>
+                <div class="progress-bar-custom">
+                    <div class="progress-fill" style="width: 85%;"></div>
+                </div>
+                <div class="metric-value">4.5/5.0</div>
+            </div>
+
+            <div class="metric-card">
+                <h4><i class="fas fa-user-check"></i> User Satisfaction</h4>
+                <div class="progress-bar-custom">
+                    <div class="progress-fill" style="width: 88%;"></div>
+                </div>
+                <div class="metric-value">88%</div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+            <h3><i class="fas fa-history"></i> Recent Activity</h3>
+            
+            <div class="activity-item">
+               
+                <div class="activity-section">
+            <h3><i class="fas fa-history"></i> Recent Activity</h3>
+            
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">New User Registered</div>
+                    <div class="activity-description">Rahul Sharma (ID: #842) just joined the platform.</div>
+                </div>
+                <div class="activity-time">2 mins ago</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">Restaurant Verified</div>
+                    <div class="activity-description">'Spice Junction' (Station: NDLS) was approved by the admin.</div>
+                </div>
+                <div class="activity-time">45 mins ago</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #FF9500, #ff8c00);">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">Large Order Placed</div>
+                    <div class="activity-description">Order #9921 for 12 meals was placed at Mumbai Central.</div>
+                </div>
+                <div class="activity-time">1 hour ago</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #E74C3C, #C0392B);">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">New Support Ticket</div>
+                    <div class="activity-description">Complaint received regarding Order #9810 (Delayed delivery).</div>
+                </div>
+                <div class="activity-time">3 hours ago</div>
+            </div>
+
+            <div class="activity-item">
+                <div class="activity-icon" style="background: linear-gradient(135deg, #1B9CFC, #004E89);">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">Station Data Updated</div>
+                    <div class="activity-description">Admin updated platform details for Bangalore City Station.</div>
+                </div>
+                <div class="activity-time">Yesterday</div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center p-3 mb-5 glass-effect rounded shadow-sm text-white" 
+             style="background: var(--dark-bg); opacity: 0.9;">
+            <div class="small fw-bold">
+                <i class="fas fa-circle text-success me-2 animate-pulse"></i> System Status: All Nodes Online
+            </div>
+            <div class="small opacity-75">
+                Last Refreshed: Dec 24, 2025 - 10:45 AM
+            </div>
+        </div>
+    </div> <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5><i class="fas fa-shield-alt"></i> Rail Eats Admin</h5>
+                    <p>Advanced Management System for national railway catering and delivery logistics.</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Internal Links</h5>
+                    <a href="#"><i class="fas fa-angle-right me-1"></i>System Logs</a>
+                    <a href="#"><i class="fas fa-angle-right me-1"></i>Database Backup</a>
+                    <a href="#"><i class="fas fa-angle-right me-1"></i>API Documentation</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Support</h5>
+                    <a href="#"><i class="fas fa-angle-right me-1"></i>IT Help Desk</a>
+                    <a href="#"><i class="fas fa-angle-right me-1"></i>Security Protocol</a>
+                    <a href="#"><i class="fas fa-angle-right me-1"></i>Server Status</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Network Status</h5>
+                    <p class="small mb-1"><i class="fas fa-server text-success me-2"></i>Primary Server: Mumbai</p>
+                    <p class="small mb-1"><i class="fas fa-server text-success me-2"></i>Backup Server: Delhi</p>
+                    <p class="small"><i class="fas fa-lock text-info me-2"></i>SSL Encryption: Active</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Rail Eats Administration Panel. All rights reserved. | Core System v3.0.4</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .3; }
+        }
+
+        /* Mobile Scroll Optimization */
+        @media (max-width: 768px) {
+            .table-responsive {
+                border-radius: var(--border-radius);
+                background: white;
+            }
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Example logic for dynamic counter effect on stats
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Admin Dashboard Loaded Successfully");
+            // You can add your chart.js or other reporting logic here
+        });
+    </script>
+</body>
+</html>

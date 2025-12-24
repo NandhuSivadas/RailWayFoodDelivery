@@ -16,8 +16,6 @@ class tbl_user(models.Model):
         return self.user_name
 
 
-from django.db import models
-
 class tbl_restaurant(models.Model):
     restaurant_name = models.CharField(max_length=100)
     owner_name = models.CharField(max_length=100)

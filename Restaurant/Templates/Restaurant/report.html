@@ -1,94 +1,129 @@
 {% extends 'Restaurant/header.html' %}
 
-{% block title %}Rail Eats - All Bookings{% endblock %}
+{% block title %}Rail Eats - Booking Report{% endblock %}
 
 {% block content %}
 <div class="container py-4">
+
+    <!-- PAGE HEADER -->
     <div class="page-header d-flex justify-content-between align-items-center mb-4 shadow-sm">
         <div>
-            <h2 class="page-title mb-0"><i class="fas fa-clipboard-list"></i> All Food Bookings</h2>
-            <p class="page-subtitle text-muted">Complete history of all orders received by your restaurant</p>
+            <h2 class="page-title mb-0">
+                <i class="fas fa-clipboard-list"></i> Booking Report
+            </h2>
+            <p class="page-subtitle text-muted">
+                View bookings by status
+            </p>
         </div>
         <a href="{% url 'wrestauarant:homepage' %}" class="btn btn-primary">
             <i class="fas fa-arrow-left me-2"></i>Dashboard
         </a>
     </div>
 
+    <!-- FILTER BUTTONS -->
+    <div class="mb-4 d-flex gap-2 flex-wrap">
+
+        <a href="{% url 'wrestauarant:report' %}"
+           class="btn btn-outline-dark {% if not status_filter %}active{% endif %}">
+            All
+        </a>
+
+        <a href="{% url 'wrestauarant:report' %}?status=pending"
+           class="btn btn-outline-warning {% if status_filter == 'pending' %}active{% endif %}">
+            Pending
+        </a>
+
+        <a href="{% url 'wrestauarant:report' %}?status=accepted"
+           class="btn btn-outline-success {% if status_filter == 'accepted' %}active{% endif %}">
+            Accepted
+        </a>
+
+        <a href="{% url 'wrestauarant:report' %}?status=rejected"
+           class="btn btn-outline-danger {% if status_filter == 'rejected' %}active{% endif %}">
+            Rejected
+        </a>
+
+        <a href="{% url 'wrestauarant:report' %}?status=cancelled"
+           class="btn btn-outline-secondary {% if status_filter == 'cancelled' %}active{% endif %}">
+            Cancelled by User
+        </a>
+
+    </div>
+
+    <!-- BOOKINGS TABLE -->
     <div class="table-container shadow-lg animate__animated animate__fadeIn">
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead>
                     <tr>
-                        <th scope="col">User</th>
-                        <th scope="col">Food Item</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Delivery Time</th>
-                        <th scope="col">Booking Date</th>
-                        <th scope="col">Status</th>
+                        <th>User</th>
+                        <th>Food</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Delivery Time</th>
+                        <th>Booked On</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
+
                     {% for b in bookings %}
                     <tr>
                         <td>
-                            <div class="user-info">
+                            <div class="d-flex align-items-center gap-2">
                                 <div class="user-avatar">
                                     {{ b.user.user_name|slice:":1"|upper }}
                                 </div>
-                                <div class="text-start">
-                                    <div class="user-name">{{ b.user.user_name }}</div>
-                                    <span class="user-phone small text-muted">Customer</span>
+                                <div>
+                                    <strong>{{ b.user.user_name }}</strong>
                                 </div>
                             </div>
                         </td>
 
-                        <td class="fw-bold text-dark">
-                            {{ b.food.food_name }}
+                        <td class="fw-semibold">{{ b.food.food_name }}</td>
+
+                        <td>x{{ b.quantity }}</td>
+
+                        <td>
+                            <i class="fas fa-rupee-sign"></i>
+                            {{ b.total_price }}
                         </td>
 
                         <td>
-                            <span class="quantity-badge">x{{ b.quantity }}</span>
-                        </td>
-
-                        <td class="fw-bold text-secondary">
-                            <i class="fas fa-rupee-sign me-1"></i>{{ b.total_price }}
+                            <i class="far fa-clock"></i>
+                            {{ b.delivery_time }}
                         </td>
 
                         <td>
-                            <span class="text-primary fw-semibold">
-                                <i class="far fa-clock me-1"></i>{{ b.delivery_time }}
-                            </span>
-                        </td>
-
-                        <td class="small text-muted">
-                            <i class="far fa-calendar-alt me-1"></i>{{ b.booking_date|date:"M d, Y" }}
+                            {{ b.booking_date|date:"M d, Y" }}
                         </td>
 
                         <td>
                             {% if b.status == 0 %}
-                                <span class="badge badge-pending">Pending</span>
+                                <span class="badge bg-warning">Pending</span>
                             {% elif b.status == 1 %}
-                                <span class="badge badge-success">Accepted</span>
+                                <span class="badge bg-success">Accepted</span>
                             {% elif b.status == 2 %}
-                                <span class="badge badge-danger">Rejected</span>
+                                <span class="badge bg-danger">Rejected</span>
                             {% elif b.status == 3 %}
-                                <span class="badge badge-secondary">Cancelled</span>
+                                <span class="badge bg-secondary">Cancelled</span>
                             {% endif %}
                         </td>
                     </tr>
+
                     {% empty %}
                     <tr>
-                        <td colspan="7" class="empty-state py-5">
-                            <i class="fas fa-history mb-3"></i>
-                            <h4>No Bookings Found</h4>
-                            <p>Once customers start ordering, their details will appear here.</p>
+                        <td colspan="7" class="text-center py-5">
+                            <i class="fas fa-box-open fa-2x mb-3"></i>
+                            <h5>No bookings found</h5>
                         </td>
                     </tr>
                     {% endfor %}
+
                 </tbody>
             </table>
         </div>
     </div>
+
 </div>
 {% endblock %}

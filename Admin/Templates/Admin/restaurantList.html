@@ -1,0 +1,144 @@
+{% extends 'Admin/header.html' %}
+
+{% block title %}Restaurant Management{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">
+                <i class="fas fa-store me-2"></i>Restaurant Management
+            </h2>
+            <p class="text-muted mb-0">
+                View and manage all registered restaurants
+            </p>
+        </div>
+        <a href="{% url 'wadmin:homepage' %}" class="btn btn-primary">
+            <i class="fas fa-arrow-left me-1"></i> Dashboard
+        </a>
+    </div>
+
+    <!-- FILTER BUTTONS -->
+    <div class="mb-3 d-flex gap-2 flex-wrap">
+
+        <a href="{% url 'wadmin:restaurant_list' %}"
+           class="btn btn-outline-dark {% if not status_filter %}active{% endif %}">
+            All
+        </a>
+
+        <a href="{% url 'wadmin:restaurant_list' %}?status=pending"
+           class="btn btn-outline-warning {% if status_filter == 'pending' %}active{% endif %}">
+            Pending
+        </a>
+
+        <a href="{% url 'wadmin:restaurant_list' %}?status=accepted"
+           class="btn btn-outline-success {% if status_filter == 'accepted' %}active{% endif %}">
+            Accepted
+        </a>
+
+        <a href="{% url 'wadmin:restaurant_list' %}?status=rejected"
+           class="btn btn-outline-danger {% if status_filter == 'rejected' %}active{% endif %}">
+            Rejected
+        </a>
+
+    </div>
+
+    <!-- RESTAURANT TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-body table-responsive">
+
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Restaurant</th>
+                        <th>Owner</th>
+                        <th>Email</th>
+                        <th>Station</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for r in restaurants %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <td class="fw-bold text-primary">
+                            {{ r.restaurant_name }}
+                        </td>
+
+                        <td>{{ r.owner_name }}</td>
+                        <td>{{ r.email }}</td>
+
+                        <td>
+                            {{ r.station_name }}
+                            <small class="text-muted">
+                                ({{ r.station_code }})
+                            </small>
+                        </td>
+
+                        <!-- STATUS -->
+                        <td>
+                            {% if r.status == 0 %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif r.status == 1 %}
+                                <span class="badge bg-success">Accepted</span>
+                            {% elif r.status == 2 %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- ACTION -->
+                        <td>
+                            {% if r.status == 0 %}
+                                <a href="{% url 'wadmin:change_restaurant_status' r.id 1 %}"
+                                   class="btn btn-success btn-sm"
+                                   onclick="return confirm('Accept this restaurant?')">
+                                    Accept
+                                </a>
+
+                                <a href="{% url 'wadmin:change_restaurant_status' r.id 2 %}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Reject this restaurant?')">
+                                    Reject
+                                </a>
+
+                            {% elif r.status == 1 %}
+                                <a href="{% url 'wadmin:change_restaurant_status' r.id 2 %}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Reject this restaurant?')">
+                                    Reject
+                                </a>
+
+                            {% elif r.status == 2 %}
+                                <a href="{% url 'wadmin:change_restaurant_status' r.id 1 %}"
+                                   class="btn btn-success btn-sm"
+                                   onclick="return confirm('Accept this restaurant again?')">
+                                    Accept Again
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="fas fa-store-slash fa-2x mb-2"></i>
+                            <br>
+                            No restaurants found
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

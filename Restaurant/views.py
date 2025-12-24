@@ -210,17 +210,30 @@ def accepted_bookings(request):
     )
 
 def report(request):
-    # Check restaurant login
     if not request.session.get('rid'):
         return redirect('wguest:login')
+
+    status_filter = request.GET.get('status')
 
     bookings = tbl_booking.objects.filter(
         restaurant_id=request.session['rid']
     ).select_related('user', 'food').order_by('-booking_date')
 
+    # Apply status filter
+    if status_filter == 'accepted':
+        bookings = bookings.filter(status=1)
+    elif status_filter == 'rejected':
+        bookings = bookings.filter(status=2)
+    elif status_filter == 'cancelled':
+        bookings = bookings.filter(status=3)
+    elif status_filter == 'pending':
+        bookings = bookings.filter(status=0)
+
     return render(request, 'Restaurant/report.html', {
-        'bookings': bookings
+        'bookings': bookings,
+        'status_filter': status_filter
     })
+
 
 
 def logout(request):
