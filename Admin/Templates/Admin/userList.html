@@ -1,0 +1,125 @@
+{% extends 'Admin/header.html' %}
+
+{% block title %}User Management{% endblock %}
+
+{% block page_icon %}
+<i class="fas fa-users"></i>
+{% endblock %}
+
+{% block page_title %}
+User Management
+{% endblock %}
+
+{% block page_subtitle %}
+View, accept or reject registered users
+{% endblock %}
+
+{% block content %}
+
+<!-- FILTER BUTTONS -->
+<div class="mb-3 d-flex gap-2 flex-wrap">
+    <a href="{% url 'wadmin:user_list' %}"
+       class="btn btn-outline-dark {% if not status_filter %}active{% endif %}">
+        All Users
+    </a>
+
+    <a href="?status=pending"
+       class="btn btn-outline-warning {% if status_filter == 'pending' %}active{% endif %}">
+        Pending
+    </a>
+
+    <a href="?status=accepted"
+       class="btn btn-outline-success {% if status_filter == 'accepted' %}active{% endif %}">
+        Accepted
+    </a>
+
+    <a href="?status=rejected"
+       class="btn btn-outline-danger {% if status_filter == 'rejected' %}active{% endif %}">
+        Rejected
+    </a>
+</div>
+
+<div class="card shadow-lg rounded-4">
+    <div class="card-body table-responsive">
+
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for u in users %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+
+                    <td class="fw-bold text-primary">
+                        {{ u.user_name }}
+                    </td>
+
+                    <td>{{ u.user_email }}</td>
+                    <td>{{ u.user_phone }}</td>
+
+                    <td>
+                        {% if u.status == 0 %}
+                            <span class="badge bg-warning">Pending</span>
+                        {% elif u.status == 1 %}
+                            <span class="badge bg-success">Accepted</span>
+                        {% elif u.status == 2 %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        {% if u.status == 0 %}
+                            <a href="{% url 'wadmin:change_user_status' u.id 1 %}"
+                               class="btn btn-success btn-sm"
+                               onclick="return confirm('Accept this user?')">
+                                <i class="fas fa-check"></i> Accept
+                            </a>
+
+                            <a href="{% url 'wadmin:change_user_status' u.id 2 %}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Reject this user?')">
+                                <i class="fas fa-times"></i> Reject
+                            </a>
+
+                        {% elif u.status == 1 %}
+                            <a href="{% url 'wadmin:change_user_status' u.id 2 %}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Reject this user?')">
+                                <i class="fas fa-ban"></i> Reject
+                            </a>
+
+                        {% elif u.status == 2 %}
+                            <a href="{% url 'wadmin:change_user_status' u.id 1 %}"
+                               class="btn btn-success btn-sm"
+                               onclick="return confirm('Accept this user again?')">
+                                <i class="fas fa-undo"></i> Accept Again
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fas fa-user-slash fa-2x mb-2"></i><br>
+                        No users found
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}

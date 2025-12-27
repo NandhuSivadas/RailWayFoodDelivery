@@ -1,38 +1,109 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Restaurant Approval</title>
-</head>
-<body>
+{% extends 'Admin/header.html' %}
 
-<h2>Pending Restaurant Requests</h2>
+{% block title %}Restaurant Requests{% endblock %}
 
-<table border="1" cellpadding="8">
-<tr>
-    <th>Name</th>
-    <th>Owner</th>
-    <th>Station</th>
-    <th>Email</th>
-    <th>Action</th>
-</tr>
 
-{% for r in restaurants %}
-<tr>
-    <td>{{ r.restaurant_name }}</td>
-    <td>{{ r.owner_name }}</td>
-    <td>{{ r.station_name }}</td>
-    <td>{{ r.email }}</td>
-    <td>
-        <a href="{% url 'approve_restaurant' r.id %}">Approve</a> |
-        <a href="{% url 'reject_restaurant' r.id %}">Reject</a>
-    </td>
-</tr>
-{% empty %}
-<tr>
-    <td colspan="5">No pending requests</td>
-</tr>
-{% endfor %}
-</table>
+{% block page_icon %}
+<i class="fas fa-store"></i>
+{% endblock %}
 
-</body>
-</html>
+{% block page_title %}
+Restaurant Requests
+{% endblock %}
+
+{% block page_subtitle %}
+Approve or reject newly registered restaurants
+{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-lg rounded-4">
+    <div class="card-body table-responsive">
+
+        <table class="table table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Restaurant</th>
+                    <th>Owner</th>
+                    <th>Email</th>
+                    <th>Station</th>
+                    <th>Status</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for r in restaurants %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+
+                    <td class="fw-bold text-primary">
+                        {{ r.restaurant_name }}
+                    </td>
+
+                    <td>{{ r.owner_name }}</td>
+                    <td>{{ r.email }}</td>
+
+                    <td>
+                        {{ r.station_name }}
+                        <br>
+                        <small class="text-muted">{{ r.station_code }}</small>
+                    </td>
+
+                    <td>
+                        {% if r.status == 0 %}
+                            <span class="badge bg-warning">Pending</span>
+                        {% elif r.status == 1 %}
+                            <span class="badge bg-success">Accepted</span>
+                        {% elif r.status == 2 %}
+                            <span class="badge bg-danger">Rejected</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        {% if r.status == 0 %}
+                            <a href="{% url 'wadmin:change_restaurant_status' r.id 1 %}"
+                               class="btn btn-success btn-sm"
+                               onclick="return confirm('Accept this restaurant?')">
+                                <i class="fas fa-check"></i> Accept
+                            </a>
+
+                            <a href="{% url 'wadmin:change_restaurant_status' r.id 2 %}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Reject this restaurant?')">
+                                <i class="fas fa-times"></i> Reject
+                            </a>
+
+                        {% elif r.status == 1 %}
+                            <a href="{% url 'wadmin:change_restaurant_status' r.id 2 %}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Reject this restaurant?')">
+                                <i class="fas fa-ban"></i> Reject
+                            </a>
+
+                        {% elif r.status == 2 %}
+                            <a href="{% url 'wadmin:change_restaurant_status' r.id 1 %}"
+                               class="btn btn-success btn-sm"
+                               onclick="return confirm('Accept this restaurant again?')">
+                                <i class="fas fa-undo"></i> Accept Again
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+
+            {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        <i class="fas fa-store-slash fa-2x mb-2"></i><br>
+                        No restaurant requests found
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}

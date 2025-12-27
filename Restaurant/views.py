@@ -179,9 +179,24 @@ def booking_requests(request):
         restaurant_id=request.session['rid'],
         status=0
     )
-    return render(request, 'Restaurant/bookingRequest.html', {
+    return render(request,'Restaurant/bookingRequest.html', {
         'bookings': bookings
     })
+
+
+def accept_order(request, id):
+    booking = get_object_or_404(tbl_booking, id=id)
+    booking.status = 1  # Accepted
+    booking.save()
+    return redirect('wrestauarant:booking_requests')
+
+
+def reject_order(request, id):
+    booking = get_object_or_404(tbl_booking, id=id)
+    booking.status = 2  # Rejected
+    booking.save()
+    return redirect('wrestauarant:booking_requests')
+
 
 
 def update_booking_status(request, booking_id, status):

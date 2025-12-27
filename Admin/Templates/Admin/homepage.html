@@ -704,10 +704,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:homepage' %}"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:homepage' %}"><i class="fas fa-users"></i> Users</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-utensils"></i> Restaurants</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-receipt"></i> Orders</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:user_list' %}"><i class="fas fa-users"></i> Users</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:restaurant_list' %}"><i class="fas fa-utensils"></i> Restaurants List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:restaurant_requests' %}"><i class="fas fa-receipt"></i>Restaurant Request</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'wadmin:order_report' %}"><i class="fas fa-chart-bar"></i> Reports</a></li>
                     <li class="nav-item">
                         <span class="admin-user-info">
                             <i class="fas fa-user-shield"></i> Admin
@@ -737,16 +737,32 @@
                 <div class="stat-icon users">
                     <i class="fas fa-users"></i>
                 </div>
-                <div class="stat-number">2,850</div>
+                <div class="stat-number">{{ userCount }}</div>
                 <div class="stat-label">Total Users</div>
                 <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 12% this month</span>
             </div>
-
+             <div class="stat-card">
+                <div class="stat-icon stations">
+                    <i class="fas fa-train"></i>
+                </div>
+                <div class="stat-number">{{ accepted_users }}</div>
+                <div class="stat-label">Accepted Users </div>
+                <span class="stat-change negative"><i class="fas fa-arrow-down"></i> No change</span>
+            </div>
+           
+              <div class="stat-card">
+                <div class="stat-icon complaints">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="stat-number">{{ pending_users }}</div>
+                <div class="stat-label">Pending User</div>
+                <span class="stat-change negative"><i class="fas fa-arrow-up"></i> 5 new today</span>
+            </div>
             <div class="stat-card">
                 <div class="stat-icon restaurants">
                     <i class="fas fa-utensils"></i>
                 </div>
-                <div class="stat-number">145</div>
+                <div class="stat-number">{{ restaurantCount }}</div>
                 <div class="stat-label">Active Restaurants</div>
                 <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 8% growth</span>
             </div>
@@ -755,40 +771,25 @@
                 <div class="stat-icon orders">
                     <i class="fas fa-receipt"></i>
                 </div>
-                <div class="stat-number">12,340</div>
+                <div class="stat-number">{{ orderCount }}</div>
                 <div class="stat-label">Total Orders</div>
                 <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 25% increase</span>
             </div>
 
-            <div class="stat-card">
-                <div class="stat-icon stations">
-                    <i class="fas fa-train"></i>
-                </div>
-                <div class="stat-number">28</div>
-                <div class="stat-label">Railway Stations</div>
-                <span class="stat-change negative"><i class="fas fa-arrow-down"></i> No change</span>
-            </div>
-
-            <div class="stat-card">
+           
+            <!-- <div class="stat-card">
                 <div class="stat-icon revenue">
                     <i class="fas fa-rupee-sign"></i>
                 </div>
                 <div class="stat-number">₹24.5L</div>
                 <div class="stat-label">Total Revenue</div>
                 <span class="stat-change positive"><i class="fas fa-arrow-up"></i> 18% boost</span>
-            </div>
+            </div> -->
 
-            <div class="stat-card">
-                <div class="stat-icon complaints">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="stat-number">42</div>
-                <div class="stat-label">Pending Complaints</div>
-                <span class="stat-change negative"><i class="fas fa-arrow-up"></i> 5 new today</span>
-            </div>
+          
         </div>
 
-        <!-- Quick Actions -->
+        <!-- Quick Actions
         <div class="action-section">
             <h3><i class="fas fa-lightning-bolt"></i> Quick Actions</h3>
             <div class="action-grid">
@@ -811,7 +812,7 @@
                     <i class="fas fa-file-pdf"></i> Generate Reports
                 </button>
             </div>
-        </div>
+        </div> -->
 
         <!-- Performance Metrics -->
         <div class="metrics-section">
@@ -841,7 +842,7 @@
         </div>
 
         <!-- Recent Activity -->
-        <div class="activity-section">
+        <!-- <div class="activity-section">
             <h3><i class="fas fa-history"></i> Recent Activity</h3>
             
             <div class="activity-item">
@@ -913,7 +914,7 @@
             <div class="small opacity-75">
                 Last Refreshed: Dec 24, 2025 - 10:45 AM
             </div>
-        </div>
+        </div> -->
     </div> <footer>
         <div class="container">
             <div class="footer-content">

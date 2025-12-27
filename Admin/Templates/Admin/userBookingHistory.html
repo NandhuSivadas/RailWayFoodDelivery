@@ -1,0 +1,65 @@
+{% extends 'Admin/header.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h3 class="fw-bold mb-3">
+        Booking History
+    </h3>
+
+    <a href="{% url 'wadmin:order_report' %}" class="btn btn-secondary mb-3">
+        ← Back
+    </a>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+
+            <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Restaurant</th>
+                        <th>Food</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for b in bookings %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ b.restaurant.restaurant_name }}</td>
+                        <td>{{ b.food.food_name }}</td>
+                        <td>x{{ b.quantity }}</td>
+                        <td>₹ {{ b.total_amount }}</td>
+                        <td>{{ b.booking_date|date:"d M Y H:i" }}</td>
+                        <td>
+                            {% if b.status == 0 %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif b.status == 1 %}
+                                <span class="badge bg-success">Accepted</span>
+                            {% elif b.status == 2 %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% elif b.status == 3 %}
+                                <span class="badge bg-secondary">Cancelled</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">
+                            No bookings found
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

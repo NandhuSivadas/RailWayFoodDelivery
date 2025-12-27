@@ -1,0 +1,155 @@
+{% extends 'Admin/header.html' %}
+
+{% block title %}Order Report{% endblock %}
+
+{% block page_icon %}
+<i class="fas fa-store"></i>
+{% endblock %}
+
+{% block page_title %}
+Report
+{% endblock %}
+
+{% block page_subtitle %}
+Report Of Orders Placed By User
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold">
+                <i class="fas fa-receipt me-2"></i>Order Report
+            </h3>
+            <p class="text-muted mb-0">
+                Latest booking of each user with full history access
+            </p>
+        </div>
+        <a href="{% url 'wadmin:homepage' %}" class="btn btn-primary">
+            <i class="fas fa-arrow-left me-1"></i> Dashboard
+        </a>
+    </div>
+
+    <!-- FILTER FORM -->
+    <form method="get" class="row g-2 mb-4">
+
+        <!-- STATUS -->
+        <div class="col-md-2">
+            <select name="status" class="form-select">
+                <option value="">All Status</option>
+                <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="accepted" {% if status_filter == 'accepted' %}selected{% endif %}>Accepted</option>
+                <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+                <option value="cancelled" {% if status_filter == 'cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="col-md-3">
+            <input type="text"
+                   name="search"
+                   value="{{ search }}"
+                   class="form-control"
+                   placeholder="User / Restaurant / Food">
+        </div>
+
+        <!-- FROM DATE -->
+        <div class="col-md-2">
+            <input type="date"
+                   name="from_date"
+                   value="{{ from_date }}"
+                   class="form-control">
+        </div>
+
+        <!-- TO DATE -->
+        <div class="col-md-2">
+            <input type="date"
+                   name="to_date"
+                   value="{{ to_date }}"
+                   class="form-control">
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-success w-100">
+                <i class="fas fa-filter me-1"></i> Apply
+            </button>
+            <a href="{% url 'wadmin:order_report' %}" class="btn btn-secondary w-100">
+                Reset
+            </a>
+        </div>
+    </form>
+
+    <!-- TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-body table-responsive p-0">
+
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Restaurant</th>
+                        <th>Food</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Delivery</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                {% for o in bookings %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+
+                        <!-- USER + VIEW ALL -->
+                        <td>
+                            <strong>{{ o.user.user_name }}</strong><br>
+                            <a href="{% url 'wadmin:user_booking_history' o.user.id %}"
+                               class="text-primary small fw-semibold">
+                                View all bookings →
+                            </a>
+                        </td>
+
+                        <td>{{ o.restaurant.restaurant_name }}</td>
+                        <td>{{ o.food.food_name }}</td>
+                        <td>x{{ o.quantity }}</td>
+                        <td>₹ {{ o.total_amount }}</td>
+                        <td>{{ o.delivery_time }}</td>
+                        <td>{{ o.booking_date|date:"d M Y H:i" }}</td>
+
+                        <!-- STATUS -->
+                        <td>
+                            {% if o.status == 0 %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% elif o.status == 1 %}
+                                <span class="badge bg-success">Accepted</span>
+                            {% elif o.status == 2 %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% elif o.status == 3 %}
+                                <span class="badge bg-secondary">Cancelled</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                {% empty %}
+                    <tr>
+                        <td colspan="9" class="text-center text-muted py-4">
+                            <i class="fas fa-box-open fa-2x mb-2"></i><br>
+                            No orders found
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

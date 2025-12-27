@@ -27,7 +27,7 @@
                         </div>
                     </div>
 
-                    <form method="post" class="needs-validation">
+                    <form method="post" id="orderForm" class="needs-validation" novalidate>
                         {% csrf_token %}
 
                         <div class="mb-4">
@@ -42,10 +42,19 @@
                         <div class="mb-4">
                             <label class="form-label fw-bold">Delivery Time</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-white border-end-0"><i class="fas fa-clock text-warning"></i></span>
-                                <input type="time" name="delivery_time" class="form-control border-start-0" required>
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-clock text-warning"></i>
+                                </span>
+                                <input type="time" name="delivery_time" id="delivery_time" class="form-control border-start-0" required>
                             </div>
-                            <small class="text-muted mt-1 d-block"><i class="fas fa-info-circle me-1"></i>Set this according to your train's arrival.</small>
+                            <div id="time-error" class="text-danger small mt-2" style="display: none; font-weight: 500;">
+                                <i class="fas fa-exclamation-triangle me-1"></i> 
+                                Delivery must be at least 20 minutes from now.
+                            </div>
+                            <small class="text-muted mt-1 d-block">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Min. 20 mins preparation time required.
+                            </small>
                         </div>
 
                         <div class="d-grid gap-2 mt-5">
@@ -70,4 +79,61 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const timeInput = document.getElementById("delivery_time");
+    const errorDiv = document.getElementById("time-error");
+    const form = document.getElementById("orderForm");
+
+    /**
+     * Validates if the selected time is at least 20 minutes in the future
+     */
+    function validateTime() {
+        const selectedTimeValue = timeInput.value; 
+
+        if (!selectedTimeValue) {
+            return false;
+        }
+
+        const now = new Date();
+        const [hours, minutes] = selectedTimeValue.split(':');
+        
+        // Create a date object for the chosen time today
+        const selectedDate = new Date();
+        selectedDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+        // If the selected time has already passed today (e.g., it's 11 PM and they pick 1 AM), 
+        // we assume they mean tomorrow, but for rail delivery, usually, we just block past times.
+        const minAllowedDate = new Date(now.getTime() + 20 * 60000); // Current time + 20 mins
+
+        if (selectedDate < minAllowedDate) {
+            // Show error
+            timeInput.classList.add('is-invalid');
+            timeInput.style.borderColor = "#dc3545";
+            errorDiv.style.display = 'block';
+            return false;
+        } else {
+            // Clear error
+            timeInput.classList.remove('is-invalid');
+            timeInput.style.borderColor = "";
+            errorDiv.style.display = 'none';
+            return true;
+        }
+    }
+
+    // Run validation whenever the user changes the time
+    timeInput.addEventListener("input", validateTime);
+
+    // Prevent form submission if validation fails
+    form.addEventListener("submit", function (e) {
+        const isValid = validateTime();
+        if (!isValid) {
+            e.preventDefault(); 
+            e.stopPropagation();
+            timeInput.focus();
+        }
+    });
+});
+</script>
 {% endblock %}

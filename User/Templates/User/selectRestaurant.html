@@ -1,35 +1,89 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
+{% extends 'User/header.html' %}
 
-<h2>Restaurants at {{ station }}</h2>
+{% block title %}Rail Eats - Restaurants at {{ station }}{% endblock %}
 
-<table border="1" cellpadding="8">
-<tr>
-    <th>Restaurant Name</th>
-    <th>Contact</th>
-    <th>Action</th>
-</tr>
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            
+            <div class="text-center mb-5">
+                <div class="d-inline-block bg-warning bg-opacity-10 p-3 rounded-circle mb-3">
+                    <i class="fas fa-train fa-2x text-warning"></i>
+                </div>
+                <h2 class="fw-bold">Restaurants at <span class="text-warning text-capitalize">{{ station }}</span></h2>
+                <p class="text-muted">Discover top-rated meals delivered right to your coach.</p>
+            </div>
 
-{% for r in restaurants %}
-<tr>
-    <td>{{ r.restaurant_name }}</td>
-    <td>{{ r.phone }}</td>
-    <td>
-        <a href="{% url 'wuser:view_food_items' r.id %}">View Menu</a>
-    </td>
-</tr>
-{% empty %}
-<tr>
-    <td colspan="3">No restaurants available</td>
-</tr>
-{% endfor %}
-</table>
-</body>
-</html>
+            <div class="row g-4">
+                {% for r in restaurants %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm restaurant-card" style="border-radius: 15px; overflow: hidden; transition: transform 0.3s ease;">
+                        
+                        <div style="height: 6px; background: linear-gradient(90deg, #FF9500 0%, #ff8c00 100%);"></div>
+                        
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h4 class="fw-bold mb-0 text-dark">{{ r.restaurant_name }}</h4>
+                                <span class="badge bg-success-soft text-success">
+                                    <i class="fas fa-check-circle me-1"></i> Partner
+                                </span>
+                            </div>
+
+                            <p class="text-muted mb-4">
+                                <i class="fas fa-map-marker-alt text-warning me-2"></i>Serving at {{ station }} Station
+                            </p>
+
+                            <div class="d-flex align-items-center mb-4 p-2 bg-light rounded-3">
+                                <i class="fas fa-phone-alt text-secondary me-3 ms-2"></i>
+                                <div>
+                                    <small class="text-muted d-block">Contact Restaurant</small>
+                                    <span class="fw-bold">{{ r.phone }}</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <a href="{% url 'wuser:view_food_items' r.id %}" class="btn-primary-custom text-center py-2 px-4 text-decoration-none">
+                                    View Menu <i class="fas fa-arrow-right ms-2 small"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <div class="mb-3">
+                        <i class="fas fa-search fa-4x text-light"></i>
+                    </div>
+                    <h4 class="text-muted">No restaurants found in {{ station }}.</h4>
+                    <a href="{% url 'wuser:select_station' %}" class="btn btn-link text-warning">Try another station</a>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Soft success badge color */
+    .bg-success-soft { 
+        background-color: #e8f5e9; 
+        font-size: 0.75rem;
+        padding: 5px 10px;
+    }
+
+    /* Hover animation for cards */
+    .restaurant-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Primary custom button adjustment for card context */
+    .btn-primary-custom {
+        border-radius: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+</style>
+{% endblock %}

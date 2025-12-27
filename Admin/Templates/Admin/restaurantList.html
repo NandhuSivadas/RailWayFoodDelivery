@@ -2,6 +2,19 @@
 
 {% block title %}Restaurant Management{% endblock %}
 
+
+{% block page_icon %}
+<i class="fas fa-store"></i>
+{% endblock %}
+
+{% block page_title %}
+Restaurant List
+{% endblock %}
+
+{% block page_subtitle %}
+List Of Restaurants
+{% endblock %}
+
 {% block content %}
 <div class="container py-4">
 
@@ -20,28 +33,47 @@
         </a>
     </div>
 
-    <!-- FILTER BUTTONS -->
-    <div class="mb-3 d-flex gap-2 flex-wrap">
+    <!-- FILTER + SEARCH ROW -->
+    <div class="row mb-3 align-items-center">
 
-        <a href="{% url 'wadmin:restaurant_list' %}"
-           class="btn btn-outline-dark {% if not status_filter %}active{% endif %}">
-            All
-        </a>
+        <!-- FILTER BUTTONS -->
+        <div class="col-md-8 mb-2 mb-md-0 d-flex gap-2 flex-wrap">
 
-        <a href="{% url 'wadmin:restaurant_list' %}?status=pending"
-           class="btn btn-outline-warning {% if status_filter == 'pending' %}active{% endif %}">
-            Pending
-        </a>
+            <a href="{% url 'wadmin:restaurant_list' %}"
+               class="btn btn-outline-dark {% if not status_filter %}active{% endif %}">
+                All
+            </a>
 
-        <a href="{% url 'wadmin:restaurant_list' %}?status=accepted"
-           class="btn btn-outline-success {% if status_filter == 'accepted' %}active{% endif %}">
-            Accepted
-        </a>
+            <a href="{% url 'wadmin:restaurant_list' %}?status=pending"
+               class="btn btn-outline-warning {% if status_filter == 'pending' %}active{% endif %}">
+                Pending
+            </a>
 
-        <a href="{% url 'wadmin:restaurant_list' %}?status=rejected"
-           class="btn btn-outline-danger {% if status_filter == 'rejected' %}active{% endif %}">
-            Rejected
-        </a>
+            <a href="{% url 'wadmin:restaurant_list' %}?status=accepted"
+               class="btn btn-outline-success {% if status_filter == 'accepted' %}active{% endif %}">
+                Accepted
+            </a>
+
+            <a href="{% url 'wadmin:restaurant_list' %}?status=rejected"
+               class="btn btn-outline-danger {% if status_filter == 'rejected' %}active{% endif %}">
+                Rejected
+            </a>
+
+        </div>
+
+        <!-- SEARCH FORM -->
+        <div class="col-md-4">
+            <form method="get" class="d-flex">
+                <input type="text"
+                       name="search"
+                       value="{{ search_query }}"
+                       class="form-control me-2"
+                       placeholder="Search restaurant...">
+                <button class="btn btn-outline-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
 
     </div>
 
@@ -81,7 +113,6 @@
                             </small>
                         </td>
 
-                        <!-- STATUS -->
                         <td>
                             {% if r.status == 0 %}
                                 <span class="badge bg-warning">Pending</span>
@@ -92,7 +123,6 @@
                             {% endif %}
                         </td>
 
-                        <!-- ACTION -->
                         <td>
                             {% if r.status == 0 %}
                                 <a href="{% url 'wadmin:change_restaurant_status' r.id 1 %}"
@@ -127,8 +157,7 @@
                 {% empty %}
                     <tr>
                         <td colspan="7" class="text-center text-muted py-4">
-                            <i class="fas fa-store-slash fa-2x mb-2"></i>
-                            <br>
+                            <i class="fas fa-store-slash fa-2x mb-2"></i><br>
                             No restaurants found
                         </td>
                     </tr>

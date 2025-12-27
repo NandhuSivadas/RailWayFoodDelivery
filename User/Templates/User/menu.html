@@ -1,0 +1,93 @@
+{% extends 'User/header.html' %}
+
+{% block title %}Menu - {{ restaurant.restaurant_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mb-4">
+        <a href="{% url 'wuser:foods_by_station' %}?station={{ restaurant.station_name }}" class="text-decoration-none text-muted small">
+            <i class="fas fa-arrow-left me-1"></i> Back to Restaurants at {{ restaurant.station_name }}
+        </a>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-4" style="border-radius: 15px; background: linear-gradient(135deg, #ffffff 0%, #fff9f0 100%);">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                            <i class="fas fa-utensils fa-2x"></i>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h1 class="fw-bold mb-1">{{ restaurant.restaurant_name }}</h1>
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-map-marker-alt me-1 text-warning"></i> {{ restaurant.station_name }} Station | 
+                            <i class="fas fa-phone-alt me-1 ms-3 text-warning"></i> {{ restaurant.phone }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="fw-bold mb-4">Available Dishes</h3>
+    <div class="row g-4">
+        {% for item in foods %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm food-card" style="border-radius: 15px; overflow: hidden;">
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="fw-bold mb-0 text-dark">{{ item.food_name }}</h5>
+                        <span class="badge rounded-pill bg-light text-success border border-success">
+                            <i class="fas fa-circle me-1" style="font-size: 8px;"></i> Fresh
+                        </span>
+                    </div>
+
+                    <p class="text-muted small flex-grow-1">
+                        {{ item.description|default:"Authentic and delicious meal prepared with the finest ingredients for your travel comfort." }}
+                    </p>
+
+                    <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted d-block" style="font-size: 0.7rem;">Price</small>
+                            <span class="h4 fw-bold text-primary mb-0">₹ {{ item.price }}</span>
+                        </div>
+                        
+                        <a href="{% url 'wuser:confirm_order' item.id %}" class="btn-primary-custom text-decoration-none px-4 py-2">
+                            Order Now <i class="fas fa-shopping-basket ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="mb-3 opacity-25">
+                <i class="fas fa-mortar-pestle fa-4x"></i>
+            </div>
+            <h4 class="text-muted">No items available in the menu currently.</h4>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Consistency with Restaurant Cards */
+    .food-card {
+        transition: all 0.3s ease;
+    }
+    .food-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+    }
+    .text-primary {
+        color: var(--primary-orange) !important;
+    }
+    .btn-primary-custom {
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+</style>
+{% endblock %}

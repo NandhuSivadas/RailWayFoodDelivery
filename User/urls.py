@@ -19,6 +19,12 @@ urlpatterns = [
     path('order-success/', views.order_success, name='order_success'),
     path('my-bookings/', views.my_bookings, name='my_bookings'),
 
+    path('view-menu/<int:rid>/', views.view_food_items, name='view_food_items'),
+
+    path('view-food/<int:rid>/', views.view_food_items, name='view_food_items'),
+
+    path('confirm-order/<int:food_id>/', views.confirm_order, name='confirm_order'),
+
     path('logout/',views.logout,name='logout'),
 
     

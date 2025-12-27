@@ -2,76 +2,78 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="page-header text-center mb-5">
-        <h2 class="page-title"><i class="fas fa-utensils"></i> Food Booking Requests</h2>
-        <p class="page-subtitle">Manage incoming orders from train passengers in real-time</p>
+
+    <div class="page-header text-center mb-4">
+        <h2 class="fw-bold">
+            🍽️ Food Booking Requests
+        </h2>
+        <p class="text-muted">
+            Manage incoming food orders from passengers
+        </p>
     </div>
 
-    <div class="table-container shadow-lg">
+    <div class="card shadow">
         <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead>
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-primary">
                     <tr>
-                        <th scope="col">User</th>
-                        <th scope="col">Food & Quantity</th>
-                        <th scope="col">Delivery Time</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Action</th>
+                        <th>User</th>
+                        <th>Food</th>
+                        <th>Quantity</th>
+                        <th>Delivery Time</th>
+                        <th>Booking Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    {% for request in booking_requests %}
+                {% for request in bookings %}
                     <tr>
                         <td>
-                            <div class="user-info">
-                                <div class="user-avatar">
-                                    {{ request.user.username|slice:":1"|upper }}
-                                </div>
-                                <div class="text-start">
-                                    <div class="user-name">{{ request.user.username }}</div>
-                                    <div class="user-phone small text-muted">ID: #{{ request.id }}</div>
-                                </div>
-                            </div>
+                            <strong>{{ request.user.user_name }}</strong><br>
+                            <small class="text-muted">User ID: {{ request.user.id }}</small>
                         </td>
+
                         <td>
-                            <div class="food-item">
-                                <span class="fw-bold text-dark">{{ request.food_name }}</span><br>
-                                <span class="quantity-badge mt-1">Qty: {{ request.quantity }}</span>
-                            </div>
+                            {{ request.food.food_name }}
                         </td>
+
                         <td>
-                            <span class="text-secondary fw-semibold">
-                                <i class="far fa-clock me-1 text-primary"></i>{{ request.delivery_time }}
-                            </span>
+                            {{ request.quantity }}
                         </td>
+
                         <td>
-                            <span class="text-muted small">
-                                <i class="far fa-calendar-alt me-1"></i>{{ request.date }}
-                            </span>
+                            {{ request.delivery_time }}
                         </td>
+
                         <td>
-                            <div class="action-column">
-                                <a href="{% url 'wrestauarant:accept_order' request.id %}" class="btn btn-success btn-sm">
-                                    <i class="fas fa-check"></i> Accept
-                                </a>
-                                <a href="{% url 'wrestauarant:reject_order' request.id %}" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-times"></i> Reject
-                                </a>
-                            </div>
+                            {{ request.booking_date|date:"d M Y H:i" }}
+                        </td>
+
+                        <td>
+                            <a href="{% url 'wrestauarant:accept_order' request.id %}"
+                               class="btn btn-success btn-sm">
+                                ✔ Accept
+                            </a>
+
+                            <a href="{% url 'wrestauarant:reject_order' request.id %}"
+                               class="btn btn-danger btn-sm">
+                                ✖ Reject
+                            </a>
                         </td>
                     </tr>
-                    {% empty %}
+                {% empty %}
                     <tr>
-                        <td colspan="5" class="empty-state">
-                            <i class="fas fa-clipboard-list"></i>
-                            <h4>No Booking Requests Yet</h4>
-                            <p>New orders will appear here as they come in.</p>
+                        <td colspan="6" class="text-center py-4">
+                            <h5 class="text-muted">No Booking Requests Yet</h5>
                         </td>
                     </tr>
-                    {% endfor %}
+                {% endfor %}
                 </tbody>
+
             </table>
         </div>
     </div>
+
 </div>
 {% endblock %}

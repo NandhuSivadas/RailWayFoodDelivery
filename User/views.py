@@ -69,18 +69,55 @@ def select_station(request):
 
 
 
-def foods_by_station(request):
-    station = request.GET.get('station')
-    foods = tbl_food.objects.filter(
-        restaurant__station_name=station,
-        restaurant__status=1,
-        is_available=True
-    ).select_related('restaurant')
+# def foods_by_station(request):
+#     station = request.GET.get('station')
+#     foods = tbl_food.objects.filter(
+#         restaurant__station_name=station,
+#         restaurant__status=1,
+#         is_available=True
+#     ).select_related('restaurant')
 
-    return render(request, 'User/FoodsByStation.html', {
+#     return render(request, 'User/FoodsByStation.html', {
+#         'foods': foods,
+#         'station': station
+#     })
+
+
+
+
+def foods_by_station(request):
+
+    station = request.GET.get('station')
+    restaurants = tbl_restaurant.objects.filter(
+        station_name__icontains=station, 
+        status=1
+    )
+
+    context = {
+        'station': station,
+        'restaurants': restaurants,
+    }
+    
+    return render(request, 'User/selectRestaurant.html', context)
+
+
+def view_food_items(request, rid):
+    # Fetch the restaurant or return 404 if not found
+    restaurant = get_object_or_404(tbl_restaurant, id=rid)
+    
+    # Fetch all food items for this restaurant
+    # Assuming your food model has a foreign key to tbl_restaurant
+    foods = tbl_food.objects.filter(restaurant=restaurant)
+    
+    context = {
+        'restaurant': restaurant,
         'foods': foods,
-        'station': station
-    })
+    }
+    return render(request, 'User/menu.html', context)
+
+
+
+
 
 
 
@@ -153,6 +190,49 @@ def order_success(request):
     if not request.session.get('uid'):
         return redirect('wguest:login')
     return render(request, 'User/orderSuccess.html')
+
+
+def confirm_order(request, food_id):
+    if not request.session.get('uid'):
+        return redirect('wguest:login')
+        
+    food = get_object_or_404(tbl_food, id=food_id)
+    user = tbl_user.objects.get(id=request.session['uid'])
+    
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        delivery_time_str = request.POST.get('delivery_time')
+
+        # Server-side Time Validation (20-minute buffer)
+        if delivery_time_str:
+            selected_time = datetime.strptime(delivery_time_str, '%H:%M').time()
+            now = timezone.localtime()
+            # Combine today's date with selected time
+            selected_dt = now.replace(hour=selected_time.hour, minute=selected_time.minute, second=0, microsecond=0)
+            
+            # If the time selected is earlier than (now + 20 mins), reject it
+            if selected_dt < (now + timedelta(minutes=20)):
+                return render(request, 'User/ConfirmBooking.html', {
+                    'food': food,
+                    'msg': 'Delivery time must be at least 20 minutes from now.'
+                })
+
+            total_price = food.price * quantity
+            tbl_booking.objects.create(
+                user=user,
+                restaurant=food.restaurant,
+                food=food,
+                quantity=quantity,
+                delivery_time=delivery_time_str,
+                price=total_price,
+                status=0
+            )
+            return redirect('wuser:order_success')
+
+    # GET request: show the confirmation card
+    return render(request, 'User/ConfirmBooking.html', {'food': food})
+
+
 
 
 def logout(request):

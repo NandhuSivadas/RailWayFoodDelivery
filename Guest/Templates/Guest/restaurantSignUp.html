@@ -7,7 +7,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
-            <div class="glass-card p-4 p-md-5">
+            <div class="glass-card p-4 p-md-5 shadow-lg border-0" style="border-radius: 15px; background: rgba(255, 255, 255, 0.9);">
                 <div class="text-center mb-5">
                     <h2 class="fw-bold"><i class="fas fa-store text-warning me-2"></i>Restaurant Registration</h2>
                     <p class="text-muted">Partner with Rail Eats to serve delicious meals to passengers on the go.</p>
@@ -19,7 +19,7 @@
                     </div>
                 {% endif %}
 
-                <form method="post" class="needs-validation">
+                <form method="post" id="regForm" class="needs-validation" novalidate>
                     {% csrf_token %}
 
                     <div class="row">
@@ -28,33 +28,41 @@
                             
                             <div class="mb-3">
                                 <label class="form-label fw-bold small uppercase">Restaurant Name</label>
-                                <div class="input-group">
+                                <div class="input-group has-validation">
                                     <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-utensils"></i></span>
-                                    <input type="text" name="restaurant_name" class="form-control border-start-0" placeholder="e.g. Spice Kitchen" required>
+                                    <input type="text" name="restaurant_name" class="form-control border-start-0" 
+                                           placeholder="e.g. Spice Kitchen" minlength="3" required>
+                                    <div class="invalid-feedback">Please enter a valid restaurant name (min 3 chars).</div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold small uppercase">Owner Name</label>
-                                <div class="input-group">
+                                <div class="input-group has-validation">
                                     <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-user-tie"></i></span>
-                                    <input type="text" name="owner_name" class="form-control border-start-0" placeholder="Full Name" required>
+                                    <input type="text" name="owner_name" class="form-control border-start-0" 
+                                           placeholder="Full Name" pattern="[A-Za-z\s]{3,}" required>
+                                    <div class="invalid-feedback">Owner name should contain only letters.</div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold small uppercase">Email Address</label>
-                                <div class="input-group">
+                                <div class="input-group has-validation">
                                     <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-envelope"></i></span>
-                                    <input type="email" name="email" class="form-control border-start-0" placeholder="contact@restaurant.com" required>
+                                    <input type="email" name="email" class="form-control border-start-0" 
+                                           placeholder="contact@restaurant.com" required>
+                                    <div class="invalid-feedback">Please provide a valid business email.</div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold small uppercase">Phone Number</label>
-                                <div class="input-group">
+                                <div class="input-group has-validation">
                                     <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-phone"></i></span>
-                                    <input type="text" name="phone" class="form-control border-start-0" placeholder="10-digit number" required>
+                                    <input type="text" name="phone" class="form-control border-start-0" 
+                                           placeholder="10-digit number" pattern="[6-9][0-9]{9}" required>
+                                    <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div>
                                 </div>
                             </div>
                         </div>
@@ -65,35 +73,44 @@
                             <div class="row g-2 mb-3">
                                 <div class="col-8">
                                     <label class="form-label fw-bold small uppercase">Station Name</label>
-                                    <div class="input-group">
+                                    <div class="input-group has-validation">
                                         <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-train"></i></span>
                                         <input type="text" name="station_name" class="form-control border-start-0" placeholder="Station Name" required>
+                                        <div class="invalid-feedback">Required.</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <label class="form-label fw-bold small uppercase">Code</label>
-                                    <input type="text" name="station_code" class="form-control" placeholder="NDLS" required>
+                                    <input type="text" name="station_code" class="form-control" 
+                                           placeholder="NDLS" pattern="[A-Z]{2,5}" title="2-5 Uppercase letters" required>
+                                    <div class="invalid-feedback">Invalid.</div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold small uppercase">Full Address</label>
-                                <textarea name="address" class="form-control" rows="2" placeholder="Complete restaurant address" required></textarea>
+                                <textarea name="address" class="form-control" rows="2" 
+                                          placeholder="Complete restaurant address" minlength="10" required></textarea>
+                                <div class="invalid-feedback">Address is too short.</div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold small uppercase">Password</label>
-                                <div class="input-group">
+                                <div class="input-group has-validation">
                                     <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-lock"></i></span>
-                                    <input type="password" name="password" class="form-control border-start-0" placeholder="Create password" required>
+                                    <input type="password" name="password" id="pass" class="form-control border-start-0" 
+                                           placeholder="Create password" minlength="6" required>
+                                    <div class="invalid-feedback">Password must be at least 6 characters.</div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold small uppercase">Confirm Password</label>
-                                <div class="input-group">
+                                <div class="input-group has-validation">
                                     <span class="input-group-text bg-light border-end-0 text-muted"><i class="fas fa-check-double"></i></span>
-                                    <input type="password" name="confirm_password" class="form-control border-start-0" placeholder="Repeat password" required>
+                                    <input type="password" name="confirm_password" id="confirm_pass" 
+                                           class="form-control border-start-0" placeholder="Repeat password" required>
+                                    <div id="passMatchError" class="text-danger small mt-1" style="display:none;">Passwords do not match!</div>
                                 </div>
                             </div>
                         </div>
@@ -112,4 +129,36 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById('regForm');
+    const pass = document.getElementById('pass');
+    const confirmPass = document.getElementById('confirm_pass');
+    const matchError = document.getElementById('passMatchError');
+
+    // Real-time password matching
+    function checkPasswords() {
+        if (confirmPass.value && pass.value !== confirmPass.value) {
+            confirmPass.setCustomValidity("Invalid");
+            matchError.style.display = "block";
+        } else {
+            confirmPass.setCustomValidity("");
+            matchError.style.display = "none";
+        }
+    }
+
+    pass.addEventListener('change', checkPasswords);
+    confirmPass.addEventListener('keyup', checkPasswords);
+
+    // Bootstrap validation handler
+    form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    }, false);
+});
+</script>
 {% endblock content %}
