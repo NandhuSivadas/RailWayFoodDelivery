@@ -111,45 +111,89 @@ def change_user_status(request, uid, status):
     return redirect('wadmin:userList')
 
 
+# def order_report(request):
+#     status = request.GET.get('status')
+#     search = request.GET.get('search')
+#     from_date = request.GET.get('from_date')
+#     to_date = request.GET.get('to_date')
+
+#     # STEP 1: Get latest booking date per user
+#     latest_bookings = (
+#         tbl_booking.objects
+#         .values('user_id')
+#         .annotate(latest_date=Max('booking_date'))
+#     )
+
+#     # STEP 2: Get actual booking records
+#     bookings = tbl_booking.objects.filter(
+#         booking_date__in=[b['latest_date'] for b in latest_bookings]
+#     )
+
+#     # STATUS FILTER (optional)
+#     if status:
+#         status_map = {
+#             'pending': 0,
+#             'accepted': 1,
+#             'rejected': 2,
+#             'cancelled': 3
+#         }
+#         bookings = tbl_booking.filter(status=status_map.get(status))
+
+#     # SEARCH FILTER
+#     if search:
+#         bookings = tbl_booking.filter(
+#             Q(user__user_name__icontains=search) |
+#             Q(restaurant__restaurant_name__icontains=search) |
+#             Q(food__food_name__icontains=search)
+#         )
+
+#     # DATE FILTER (optional)
+#     if from_date and to_date:
+#         bookings = tbl_booking.filter(booking_date__date__range=[from_date, to_date])
+
+#     context = {
+#         'bookings': bookings.order_by('-booking_date'),
+#         'status_filter': status,
+#         'search': search,
+#         'from_date': from_date,
+#         'to_date': to_date,
+#     }
+
+#     return render(request, 'Admin/orderReport.html', context)
+
 def order_report(request):
     status = request.GET.get('status')
     search = request.GET.get('search')
     from_date = request.GET.get('from_date')
     to_date = request.GET.get('to_date')
 
-    # STEP 1: Get latest booking date per user
+    # STEP 1: Use .objects for the query manager
     latest_bookings = (
-        tbl_booking.objects
-        .values('user_id')
+        tbl_booking.objects.values('user_id')
         .annotate(latest_date=Max('booking_date'))
     )
 
-    # STEP 2: Get actual booking records
+    # STEP 2: Use actual booking records
     bookings = tbl_booking.objects.filter(
         booking_date__in=[b['latest_date'] for b in latest_bookings]
     )
 
-    # STATUS FILTER (optional)
+    # STATUS FILTER - Change tbl_booking.filter to bookings.filter
     if status:
-        status_map = {
-            'pending': 0,
-            'accepted': 1,
-            'rejected': 2,
-            'cancelled': 3
-        }
-        bookings = tbl_booking.filter(status=status_map.get(status))
+        status_map = {'pending': 0, 'accepted': 1, 'rejected': 2, 'cancelled': 3}
+        bookings = bookings.filter(status=status_map.get(status))
 
-    # SEARCH FILTER
+    # SEARCH FILTER - Use .objects if starting a new query, or chain from bookings
     if search:
-        bookings = tbl_booking.filter(
+        bookings = bookings.filter(
             Q(user__user_name__icontains=search) |
             Q(restaurant__restaurant_name__icontains=search) |
             Q(food__food_name__icontains=search)
         )
 
-    # DATE FILTER (optional)
+    # DATE FILTER
     if from_date and to_date:
-        bookings = tbl_booking.filter(booking_date__date__range=[from_date, to_date])
+        bookings = bookings.filter(booking_date__date__range=[from_date, to_date])
 
     context = {
         'bookings': bookings.order_by('-booking_date'),
@@ -158,8 +202,9 @@ def order_report(request):
         'from_date': from_date,
         'to_date': to_date,
     }
-
     return render(request, 'Admin/orderReport.html', context)
+
+
 
 
 def user_booking_history(request, user_id):
